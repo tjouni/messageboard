@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Message</th>
+    </tr>
+    {% for msg in messages %}
+    <tr>
+        <td>{{ msg.id }}</td>
+        <td>{{ msg.date_created }}</td>
+        <td>{{ msg.message }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

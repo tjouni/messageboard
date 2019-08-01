@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<a href="../">Back to thread listing</a>
+<table>
+    <tr>
+        <td>
+            <h3>{{ thread.title }}</h3>
+            <h4>{{ thread.date_created }}</h4>
+        </td>
+    </tr>
+    <tr>
+        <td><br></td>
+    </tr>
+    {% for msg in messages %}
+    <tr>
+        <td>#{{ msg.id }} - {{ msg.date_created }}</td>
+    </tr>
+    <tr>
+        <td>{{ msg.message_text }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<h3>Post reply</h3>
+<form method="POST" action="./">
+    <table>
+        <tr>
+            <td>Message</td>
+            <td><input type="text" name="message_text" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Post reply" /></td>
+        </tr>
+    </table>
+</form>
+{% endblock %}
