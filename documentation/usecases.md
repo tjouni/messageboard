@@ -12,3 +12,4 @@
 ### Administrator
 
   * Add, remove and modify user accounts
+   * Add or remove categories a user is allowed to view and post in
