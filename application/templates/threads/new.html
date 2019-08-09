@@ -3,19 +3,44 @@
 {% block body %}
 <a href="../">Back to thread listing</a>
 
+<h3>Create new thread</h3>
+
 <form method="POST" action="{{ url_for('threads_create') }}">
-    <h3>Create new thread</h3>
     <table>
         <tr>
-            <td>Title </td>
-            <td><input type="text" name="title" /></td>
+            <td>
+                {{ form.title.label }}
+            </td>
+            <td>
+                {{ form.title }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.title.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
         </tr>
         <tr>
-            <td>Message </td>
-            <td><input type="text" name="message_text" /></td>
+            <td>
+                {{ form.message_text.label }}
+            </td>
+            <td>
+                {{ form.message_text }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.message_text.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
         </tr>
         <tr>
-            <td><input type="submit" value="Create thread" /></td>
+            <td colspan="3">
+                <input type="submit" value="Create a new thread" />
+            </td>
         </tr>
     </table>
 </form>

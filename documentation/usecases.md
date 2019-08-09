@@ -6,6 +6,7 @@
   * View messages in a thread
   * Create new threads
   * Reply to existing threads
+    * Replying to a message updates the date modified field for the thread
   * Modify and delete own messages
   
 
