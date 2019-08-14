@@ -1,5 +1,7 @@
 from application import app, db
 from flask import redirect, render_template, request, url_for
+from flask_login import login_required, current_user
+
 from application.threads.models import Thread
 from application.threads.forms import ThreadForm
 
@@ -9,28 +11,32 @@ from sqlalchemy.sql import text
 
 
 @app.route("/threads/", methods=["GET"])
+@login_required
 def threads_index():
     return render_template("threads/list.html", threads=Thread.query.all())
 
 
 @app.route("/threads/new/")
+@login_required
 def threads_form():
     return render_template("threads/new.html", form=ThreadForm())
 
 
 @app.route("/threads/", methods=["POST"])
+@login_required
 def threads_create():
     form = ThreadForm(request.form)
 
     if not form.validate():
         return render_template("threads/new.html", form=form)
 
-    t = Thread(form.title.data)
+    t = Thread(title=form.title.data, category_id=0)
 
     db.session.add(t)
     db.session.flush()
 
-    m = Message(form.message_text.data, thread_id=t.id)
+    m = Message(form.message_text.data, thread_id=t.id,
+                user_id=current_user.id)
 
     db.session.add(m)
     db.session.commit()
@@ -39,6 +45,7 @@ def threads_create():
 
 
 @app.route("/threads/<int:thread_id>/", methods=["GET"])
+@login_required
 def threads_view(thread_id, form=None):
     if form is None:
         form = MessageForm(request.form)
@@ -55,13 +62,15 @@ def threads_view(thread_id, form=None):
 
 
 @app.route("/threads/<int:thread_id>/", methods=["POST"])
+@login_required
 def threads_reply(thread_id):
     form = MessageForm(request.form)
 
     if not form.validate():
         return threads_view(thread_id, form=form)
 
-    m = Message(form.message_text.data, thread_id=thread_id)
+    m = Message(form.message_text.data, thread_id=thread_id,
+                user_id=current_user.id)
 
     t = Thread.query.get(thread_id)
     t.date_modified = db.func.current_timestamp()

@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="../">Back to thread listing</a>
+<a href="../">Back to thread listing</a><br>
+<a href="{{ url_for('auth_logout') }}">Log out</a><br>
 <table>
     <tr>
         <td>
