@@ -7,7 +7,7 @@ class Thread(db.Model):
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'),
-                            nullable=False)
+                            nullable=False, index=True)
 
     messages = db.relationship("Message", backref='thread', lazy=True)
 

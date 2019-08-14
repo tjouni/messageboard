@@ -4,7 +4,7 @@ from application import db
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     thread_id = db.Column(db.Integer, db.ForeignKey('thread.id'),
-                          nullable=False)
+                          nullable=False, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                         nullable=False)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
