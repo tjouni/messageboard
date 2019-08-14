@@ -36,7 +36,7 @@ def threads_create():
     db.session.flush()
 
     m = Message(form.message_text.data, thread_id=t.id,
-                user_id=current_user.id)
+                user_id=current_user.id, original_post=True)
 
     db.session.add(m)
     db.session.commit()
@@ -51,6 +51,35 @@ def threads_view(thread_id, form=None):
         form = MessageForm(request.form)
 
     t = Thread.query.get(thread_id)
+
+    stmt = text("SELECT id, date_created, message_text FROM Message"
+                " WHERE thread_id = :tid").params(tid=t.id)
+
+    res = db.engine.execute(stmt)
+    db.session.commit()
+
+    return render_template("threads/view.html", thread=t, messages=res, form=form)
+
+
+@app.route("/delete/<int:message_id>/", methods=["GET"])
+@login_required
+def delete_message(message_id, form=None):
+    if form is None:
+        form = MessageForm(request.form)
+
+    m = Message.query.get(message_id)
+    t = Thread.query.get(m.thread_id)
+
+    if m.original_post:
+        stmt = text("DELETE FROM Message WHERE thread_id = :tid").params(
+            tid=t.id)
+        res = db.engine.execute(stmt)
+        db.session.delete(t)
+        db.session.commit()
+        return redirect(url_for("threads_index"))
+
+    db.session.delete(m)
+    db.session.commit()
 
     stmt = text("SELECT id, date_created, message_text FROM Message"
                 " WHERE thread_id = :tid").params(tid=t.id)

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="../">Back to thread listing</a><br>
+<a href="/">Back to thread listing</a><br>
 <a href="{{ url_for('auth_logout') }}">Log out</a><br>
 <table>
     <tr>
@@ -15,7 +15,7 @@
     </tr>
     {% for msg in messages %}
     <tr>
-        <td>#{{ msg.id }} - {{ msg.date_created }}</td>
+        <td>#{{ msg.id }} - {{ msg.date_created }} - <a href="/delete/{{ msg.id }}">Delete message</a></td>
     </tr>
     <tr>
         <td>{{ msg.message_text }}</td>
