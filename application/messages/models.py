@@ -1,13 +1,12 @@
 from application import db
+from application.models import Base
 
 
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class Message(Base):
     thread_id = db.Column(db.Integer, db.ForeignKey('thread.id'),
                           nullable=False, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                         nullable=False)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     message_text = db.Column(db.String(), nullable=False)
     original_post = db.Column(db.Boolean, nullable=False)
 

@@ -1,11 +1,9 @@
 from application import db
+from application.models import Base
 
 
-class Thread(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class Thread(Base):
     title = db.Column(db.String(64), nullable=False)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'),
                             nullable=False, index=True)
 
