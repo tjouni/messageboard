@@ -13,7 +13,7 @@ from sqlalchemy.sql import text
 @app.route("/threads/", methods=["GET"])
 @login_required
 def threads_index():
-    return render_template("threads/list.html", threads=Thread.query.all())
+    return render_template("threads/list.html", threads=Thread.query.order_by(Thread.date_modified.desc()).all())
 
 
 @app.route("/threads/new/")
