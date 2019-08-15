@@ -1,31 +1,35 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h3>Please log in</h3>
+<h4>Please log in</h4>
 <br>
 
 <form method="POST" action="{{ url_for('auth_login') }}">
-    <table>
-        <tr>
-            <td>
+    <div class="container">
+        <div class="row">
+            <div class="col-1">
                 {{ form.username.label }}
-            </td>
-            <td>
+            </div>
+            <div class="col-3">
                 {{ form.username }}
-            </td>
-        </tr>
-        <tr>
-            <td>
+            </div>
+            <div class="col">
+                {{ error }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">
                 {{ form.password.label }}
-            </td>
-            <td>
+            </div>
+            <div class="col-3">
                 {{ form.password }}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="Login" /><br>{{ error }}
-            </td>
-        </tr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-1">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </div>
 </form>
 {% endblock %}

@@ -1,49 +1,48 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="../">Back to thread listing</a><br>
-<a href="{{ url_for('auth_logout') }}">Log out</a><br>
 
-
-<h3>Create new thread</h3>
+<h4>Create new thread</h4><br>
 
 <form method="POST" action="{{ url_for('threads_create') }}">
-    <table>
-        <tr>
-            <td>
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
                 {{ form.title.label }}
-            </td>
-            <td>
+            </div>
+            <div class="col-lg">
                 {{ form.title }}
-            </td>
-            <td>
+            </div>
+            <div class="col-sm">
                 <ul>
                     {% for error in form.title.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
                 {{ form.message_text.label }}
-            </td>
-            <td>
-                {{ form.message_text }}
-            </td>
-            <td>
+            </div>
+            <div class="col-lg">
+                {{ form.message_text(cols="35", rows="10") }}
+            </div>
+            <div class="col-sm">
                 <ul>
                     {% for error in form.message_text.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="submit" value="Create a new thread" />
-            </td>
-        </tr>
-    </table>
+                </td>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
 </form>
 {% endblock %}

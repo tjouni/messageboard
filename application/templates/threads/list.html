@@ -1,22 +1,27 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="./new">Create a new thread</a><br>
-<a href="{{ url_for('auth_logout') }}">Log out</a><br>
 
-<h3>Threads</h3>
-<table>
-    <tr>
-        <th>Date created</th>
-        <th>Date modified</th>
-        <th>Title</th>
-    </tr>
-    {% for thread in threads %}
-    <tr>
-        <td>{{ thread.date_created }}</td>
-        <td>{{ thread.date_modified }}</td>
-        <td><a href="{{ thread.id }}">{{ thread.title }}</a></td>
-    </tr>
-    {% endfor %}
+<h4>Threads</h4>
+<br>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Date modified</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for thread in threads %}
+        <tr>
+            <td><a href="{{ thread.id }}">{{ thread.title }}</a></td>
+            <td>{{ thread.date_created }}</td>
+            <td>{{ thread.date_modified }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
 </table>
 {% endblock %}
