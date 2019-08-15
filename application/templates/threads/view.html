@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h4>Thread title: {{ thread.title }}</h4>
-<h5>Date created: {{ thread.date_created }}</h5>
+<h4>{{ thread.title }}</h4>
+<p>Date created: {{ thread.date_created }}</p>
 <br>
 
 {% for msg in messages %}
