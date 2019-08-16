@@ -7,20 +7,18 @@ from application.auth.forms import AddUserForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 
 
-@app.route("/auth/login/", methods=["GET"])
+@app.route("/users/", methods=["GET"])
 @login_required
 def auth_index():
     return render_template("auth/list.html", users=User.get_user_list())
 
 
 @app.route("/auth/new/", methods=["GET"])
-@login_required
 def auth_form():
     return render_template("auth/new.html", form=AddUserForm())
 
 
 @app.route("/auth/new/", methods=["POST"])
-@login_required
 def auth_create():
     form = AddUserForm(request.form)
 
@@ -39,6 +37,13 @@ def auth_create():
         return render_template("auth/new.html", form=form, username_taken=True)
 
     return redirect(url_for("auth_index"))
+
+
+@app.route("/users/<int:user_id>/", methods=["GET"])
+@login_required
+def auth_view(user_id):
+    u = User.query.get(user_id)
+    return render_template("auth/view.html", user=u)
 
 
 @app.route("/auth/", methods=["GET", "POST"])

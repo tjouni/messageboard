@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h4>User: {{ user.username }}</h4>
+<br>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">User id</th>
+            <th scope="col">Full name</th>
+            <th scope="col">E-mail address</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</a></td>
+            <td>{{ user.email }}</td>
+        </tr>
+    </tbody>
+
+</table>
+{% endblock %}
