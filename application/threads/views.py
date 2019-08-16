@@ -16,7 +16,7 @@ def threads_index():
     return render_template("threads/list.html", threads=Thread.query.order_by(Thread.date_modified.desc()).all())
 
 
-@app.route("/threads/new/")
+@app.route("/threads/new/", methods=["GET"])
 @login_required
 def threads_form():
     return render_template("threads/new.html", form=ThreadForm())

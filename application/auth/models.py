@@ -10,12 +10,13 @@ class User(Base):
     name = db.Column(db.String(144), nullable=False)
     username = db.Column(db.String(144), nullable=False)
     password = db.Column(db.String(144), nullable=False)
-    email = db.Column
+    email = db.Column(db.String(144), nullable=False)
 
-    def __init__(self, name, username, password):
+    def __init__(self, name, username, password, email):
         self.name = name
         self.username = username
         self.password = password
+        self.email = email
 
     def get_id(self):
         return self.id
@@ -34,8 +35,9 @@ class User(Base):
 
     @staticmethod
     def get_user_list():
-        stmt = text("SELECT Account.id, Account.username, Account.name, COUNT(Message.id) as messagecount,"
-                    " (SELECT COUNT(Message.id) FROM Account"
+        stmt = text("SELECT Account.id, Account.username, Account.name, Account.email,"
+                    " COUNT(Message.id) as messagecount,"
+                    " (SELECT COUNT(Message.id) FROM Account AS a2"
                     " JOIN Message ON Message.user_id = Account.id"
                     " WHERE Message.original_post = '1') AS threadcount FROM Account"
                     " LEFT JOIN Message ON Message.user_id = Account.id"

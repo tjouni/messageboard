@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h4>Create new user</h4><br>
+
+<form method="POST" action="{{ url_for('auth_create') }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                {{ form.username.label }}
+            </div>
+            <div class="col-lg">
+                {{ form.username }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.username.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.password.label }}
+            </div>
+            <div class="col-lg">
+                {{ form.password }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.name.label }}
+            </div>
+            <div class="col-lg">
+                {{ form.name }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.email.label }}
+            </div>
+            <div class="col-lg">
+                {{ form.email }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                </td>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
