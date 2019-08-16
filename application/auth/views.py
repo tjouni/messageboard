@@ -4,6 +4,7 @@ from flask_login import login_required, login_user, logout_user
 from application import app, db
 from application.auth.models import User
 from application.auth.forms import AddUserForm, LoginForm
+from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/auth/login/", methods=["GET"])
@@ -30,7 +31,12 @@ def auth_create():
              password=form.password.data, email=form.email.data)
 
     db.session.add(u)
-    db.session.commit()
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("auth/new.html", form=form, username_taken=True)
 
     return redirect(url_for("auth_index"))
 

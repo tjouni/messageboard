@@ -10,7 +10,7 @@
             <div class="col-2">
                 {{ form.username.label }}
             </div>
-            <div class="col-lg">
+            <div class="col-2">
                 {{ form.username }}
             </div>
             <div class="col-sm">
@@ -18,6 +18,9 @@
                     {% for error in form.username.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
+                    {% if username_taken %}
+                    <li>Username already taken</li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -25,7 +28,7 @@
             <div class="col-2">
                 {{ form.password.label }}
             </div>
-            <div class="col-lg">
+            <div class="col-2">
                 {{ form.password }}
             </div>
             <div class="col-sm">
@@ -40,7 +43,7 @@
             <div class="col-2">
                 {{ form.name.label }}
             </div>
-            <div class="col-lg">
+            <div class="col-2">
                 {{ form.name }}
             </div>
             <div class="col-sm">
@@ -55,7 +58,7 @@
             <div class="col-2">
                 {{ form.email.label }}
             </div>
-            <div class="col-lg">
+            <div class="col-2">
                 {{ form.email }}
             </div>
             <div class="col-sm">
