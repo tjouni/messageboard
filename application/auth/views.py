@@ -32,7 +32,7 @@ def auth_create():
     db.session.add(u)
     db.session.commit()
 
-    return render_template("auth/new.html", form=AddUserForm())
+    return redirect(url_for("auth_index"))
 
 
 @app.route("/auth/", methods=["GET", "POST"])
