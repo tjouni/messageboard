@@ -10,6 +10,7 @@ class User(Base):
     name = db.Column(db.String(144), nullable=False)
     username = db.Column(db.String(144), nullable=False)
     password = db.Column(db.String(144), nullable=False)
+    email = db.Column
 
     def __init__(self, name, username, password):
         self.name = name
@@ -36,7 +37,7 @@ class User(Base):
         stmt = text("SELECT Account.id, Account.username, Account.name, COUNT(Message.id) as messagecount,"
                     " (SELECT COUNT(Message.id) FROM Account"
                     " JOIN Message ON Message.user_id = Account.id"
-                    " WHERE Message.original_post = 1) AS threadcount FROM Account"
+                    " WHERE Message.original_post = '1') AS threadcount FROM Account"
                     " LEFT JOIN Message ON Message.user_id = Account.id"
                     " GROUP BY Account.id")
         return db.engine.execute(stmt)
