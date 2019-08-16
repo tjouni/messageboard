@@ -2,6 +2,7 @@
 
 ### User
 
+  * Register a new account
   * List all threads which you have a permission (category) for
   * View messages in a thread
   * Create new threads

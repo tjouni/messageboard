@@ -6,3 +6,4 @@ Keskustelufoorumi, jossa on käyttäjiä. Jokainen käyttäjä voi kuulua useamp
   * [Käyttötapaukset](https://github.com/tjouni/messageboard/blob/master/documentation/usecases.md)
   
   * [Sovellus herokussa](https://tjouni-messageboard.herokuapp.com/) user/pass: erkki/esimerkki
+    * Älä käytä oikeita salasanoja, ne säilötään plaintextinä
