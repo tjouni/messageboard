@@ -5,8 +5,8 @@
 <p>Date created: {{ thread.date_created }}</p>
 <br>
 
-{% for msg in messages %}
 <table class="table">
+    {% for msg in messages %}
     <thead>
         <tr>
             <th scope="col">#{{ msg.id }}</th>
@@ -19,9 +19,8 @@
             <td colspan="3">{{ msg.message_text }}</td>
         </tr>
     </tbody>
-
+    {% endfor %}
 </table>
-{% endfor %}
 
 <h3>Post reply</h3>
 <br>
