@@ -14,6 +14,7 @@
             <th scope="col">E-mail address</th>
             <th scope="col"># of threads</th>
             <th scope="col"># of posts</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -21,10 +22,11 @@
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
-            <td><a href="{{ user.id }}">{{ user.username }}</a></td>
+            <td><a href="/users/{{ user.id }}">{{ user.username }}</a></td>
             <td>{{ user.email }}</td>
             <td>{{ user.threadcount }}</td>
             <td>{{ user.messagecount }}</td>
+            <td><a href="./delete/{{ user.id }}">Delete user</a></td>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,24 +1,80 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h4>User: {{ user.username }}</h4>
-<br>
+<h4>Modify user: {{ user.username }}</h4><br>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">User id</th>
-            <th scope="col">Full name</th>
-            <th scope="col">E-mail address</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</a></td>
-            <td>{{ user.email }}</td>
-        </tr>
-    </tbody>
-
-</table>
+<form method="POST" action="./">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                {{ form.username.label }}
+            </div>
+            <div class="col-2">
+                {{ form.username(value = user.username) }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.username.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                    {% if username_taken %}
+                    <li>Username already taken</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.password.label }}
+            </div>
+            <div class="col-2">
+                {{ form.password(value = user.password) }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.name.label }}
+            </div>
+            <div class="col-2">
+                {{ form.name(value = user.name) }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.email.label }}
+            </div>
+            <div class="col-2">
+                {{ form.email(value = user.email) }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                </td>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</form>
 {% endblock %}

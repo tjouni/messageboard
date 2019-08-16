@@ -3,7 +3,7 @@ from flask_login import login_required, login_user, logout_user
 
 from application import app, db
 from application.auth.models import User
-from application.auth.forms import AddUserForm, LoginForm
+from application.auth.forms import UserForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 
 
@@ -15,12 +15,12 @@ def auth_index():
 
 @app.route("/auth/new/", methods=["GET"])
 def auth_form():
-    return render_template("auth/new.html", form=AddUserForm())
+    return render_template("auth/new.html", form=UserForm())
 
 
 @app.route("/auth/new/", methods=["POST"])
 def auth_create():
-    form = AddUserForm(request.form)
+    form = UserForm(request.form)
 
     if not form.validate():
         return render_template("auth/new.html", form=form)
@@ -39,11 +39,46 @@ def auth_create():
     return redirect(url_for("auth_index"))
 
 
+@app.route("/users/<int:user_id>/", methods=["POST"])
+@login_required
+def auth_update(user_id):
+    form = UserForm(request.form)
+    u = User.query.get(user_id)
+
+    if not form.validate():
+        return render_template("auth/view.html", user=u, form=form)
+
+    u.username = form.username.data
+    u.password = form.password.data
+    u.name = form.name.data
+    u.email = form.email.data
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("auth/view.html", user=u, form=form, username_taken=True)
+
+    return redirect(url_for("auth_index"))
+
+
 @app.route("/users/<int:user_id>/", methods=["GET"])
 @login_required
 def auth_view(user_id):
     u = User.query.get(user_id)
-    return render_template("auth/view.html", user=u)
+    f = UserForm()
+    return render_template("auth/view.html", user=u, form=f)
+
+
+@app.route("/users/delete/<int:user_id>/", methods=["GET"])
+@login_required
+def delete_user(user_id):
+    u = User.query.get(user_id)
+
+    db.session.delete(u)
+    db.session.commit()
+
+    return render_template("/auth/list.html", users=User.get_user_list())
 
 
 @app.route("/auth/", methods=["GET", "POST"])
