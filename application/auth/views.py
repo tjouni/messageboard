@@ -1,13 +1,18 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_user, logout_user
-
+from flask_login import login_required, login_user, logout_user
 
 from application import app
 from application.auth.models import User
 from application.auth.forms import LoginForm
 
 
-@app.route("/auth/login", methods=["GET", "POST"])
+@app.route("/auth/login", methods=["GET"])
+@login_required
+def auth_index():
+    return render_template("auth/list.html", users=User.get_user_list())
+
+
+@app.route("/auth/", methods=["GET", "POST"])
 def auth_login():
     if request.method == "GET":
         return render_template("auth/loginform.html", form=LoginForm())
