@@ -37,9 +37,10 @@ class User(Base):
     def get_user_list():
         stmt = text("SELECT Account.id, Account.username, Account.name, Account.email,"
                     " COUNT(Message.id) as messagecount,"
-                    " (SELECT COUNT(Message.id) FROM Account AS a2"
-                    " LEFT JOIN Message AS m2 ON m2.original_post = '1'"
-                    " WHERE m2.user_id = a2.id) AS threadcount FROM Account"
-                    " LEFT JOIN Message ON Message.user_id = Account.id "
-                    " GROUP BY Account.id;")
+                    " (SELECT COUNT(DISTINCT m2.id) FROM Message AS m2"
+                    "  JOIN Account AS a2 ON m2.user_id = Account.id"
+                    "  WHERE m2.original_post = true) AS threadcount FROM Account "
+                    " LEFT JOIN Message ON Message.user_id = Account.id  "
+                    " GROUP BY Account.id;"
+                    )
         return db.engine.execute(stmt)
