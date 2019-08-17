@@ -7,13 +7,12 @@ from application.threads.forms import ThreadForm
 
 from application.messages.models import Message
 from application.messages.forms import MessageForm
-from sqlalchemy.sql import text
 
 
 @app.route("/threads/", methods=["GET"])
 @login_required
 def threads_index():
-    return render_template("threads/list.html", threads=Thread.query.order_by(Thread.date_modified.desc()).all())
+    return render_template("threads/list.html", threads=Thread.get_threads())
 
 
 @app.route("/threads/new/", methods=["GET"])
@@ -30,16 +29,8 @@ def threads_create():
     if not form.validate():
         return render_template("threads/new.html", form=form)
 
-    t = Thread(title=form.title.data, category_id=0)
-
-    db.session.add(t)
-    db.session.flush()
-
-    m = Message(form.message_text.data, thread_id=t.id,
-                user_id=current_user.id, original_post=True)
-
-    db.session.add(m)
-    db.session.commit()
+    Thread.create_thread(
+        title=form.title.data, message_text=form.message_text.data, user_id=current_user.id)
 
     return redirect(url_for("threads_index"))
 
@@ -50,13 +41,7 @@ def threads_view(thread_id, form=None):
     if form is None:
         form = MessageForm(request.form)
 
-    t = Thread.query.get(thread_id)
-
-    stmt = text("SELECT id, date_created, message_text FROM Message"
-                " WHERE thread_id = :tid").params(tid=t.id)
-
-    res = db.engine.execute(stmt)
-    db.session.commit()
+    (t, res) = Thread.get_thread(thread_id)
 
     return render_template("threads/view.html", thread=t, messages=res, form=form)
 
@@ -68,24 +53,12 @@ def delete_message(message_id, form=None):
         form = MessageForm(request.form)
 
     m = Message.query.get(message_id)
-    t = Thread.query.get(m.thread_id)
-
     if m.original_post:
-        stmt = text("DELETE FROM Message WHERE thread_id = :tid").params(
-            tid=t.id)
-        res = db.engine.execute(stmt)
-        db.session.delete(t)
-        db.session.commit()
+        Thread.delete_thread(m.thread_id)
         return redirect(url_for("threads_index"))
 
-    db.session.delete(m)
-    db.session.commit()
-
-    stmt = text("SELECT id, date_created, message_text FROM Message"
-                " WHERE thread_id = :tid").params(tid=t.id)
-
-    res = db.engine.execute(stmt)
-    db.session.commit()
+    Thread.delete_message(message_id)
+    (t, res) = Thread.get_thread(m.thread_id)
 
     return render_template("threads/view.html", thread=t, messages=res, form=form)
 
@@ -98,13 +71,7 @@ def threads_reply(thread_id):
     if not form.validate():
         return threads_view(thread_id, form=form)
 
-    m = Message(form.message_text.data, thread_id=thread_id,
-                user_id=current_user.id)
-
-    t = Thread.query.get(thread_id)
-    t.date_modified = db.func.current_timestamp()
-
-    db.session.add(m)
-    db.session.commit()
+    Thread.post_reply(thread_id=thread_id,
+                      message_text=form.message_text.data, user_id=current_user.id)
 
     return redirect(url_for("threads_view", thread_id=thread_id))

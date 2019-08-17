@@ -1,5 +1,9 @@
 from application import db
 from application.models import Base
+from application.messages.models import Message
+
+
+from sqlalchemy.sql import text
 
 
 class Thread(Base):
@@ -12,3 +16,64 @@ class Thread(Base):
     def __init__(self, title, category_id):
         self.title = title
         self.category_id = 0  # TODO
+
+    @staticmethod
+    def get_threads():
+        '''Return a list of threads ordered by date modified'''
+        return Thread.query.order_by(Thread.date_modified.desc()).all()
+
+    @staticmethod
+    def get_thread(thread_id):
+        '''Return a tuple with thread and a list of messages'''
+        t = Thread.query.get(thread_id)
+
+        stmt = text("SELECT id, date_created, message_text FROM Message"
+                    " WHERE thread_id = :tid").params(tid=t.id)
+
+        res = db.engine.execute(stmt)
+        db.session.commit()
+        return (t, res)
+
+    @staticmethod
+    def create_thread(title, message_text, user_id):
+        t = Thread(title=title, category_id=0)
+
+        db.session.add(t)
+        db.session.flush()
+        m = Message(message_text=message_text, thread_id=t.id,
+                    user_id=user_id, original_post=True)
+        db.session.add(m)
+        db.session.commit()
+
+    @staticmethod
+    def delete_message(message_id):
+        m = Message.query.get(message_id)
+        db.session.delete(m)
+        db.session.commit()
+
+        stmt = text("SELECT id, date_created, message_text FROM Message"
+                    " WHERE thread_id = :tid").params(tid=m.thread_id)
+
+        res = db.engine.execute(stmt)
+        db.session.commit()
+
+    @staticmethod
+    def delete_thread(thread_id):
+        t = Thread.query.get(thread_id)
+        stmt = text("DELETE FROM Message WHERE thread_id = :tid").params(
+            tid=thread_id)
+        res = db.engine.execute(stmt)
+
+        db.session.delete(t)
+        db.session.commit()
+
+    @staticmethod
+    def post_reply(thread_id, message_text, user_id):
+        m = Message(message_text, thread_id=thread_id,
+                    user_id=user_id)
+
+        t = Thread.query.get(thread_id)
+        t.date_modified = db.func.current_timestamp()
+
+        db.session.add(m)
+        db.session.commit()
