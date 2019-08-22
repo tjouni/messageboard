@@ -22,11 +22,14 @@
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
-            <td><a href="{{ url_for('auth_view', user_id=user.id) }}">{{ user.username }}</a></td>
+            <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.threadcount }}</td>
             <td>{{ user.messagecount }}</td>
+            {% if (current_user.id == user.id) or (current_user.is_admin()) %}
+            <td><a href="{{ url_for('auth_view', user_id=user.id) }}">Modify user</a></td>
             <td><a href="{{ url_for('delete_user', user_id=user.id) }}">Delete user</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>
