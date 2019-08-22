@@ -1,6 +1,13 @@
 from application import db
 from application.models import Base
+from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.sql import text
+
+association_table = Table('user_role', Base.metadata,
+                          Column('account_id', Integer,
+                                 ForeignKey('account.id')),
+                          Column('role_id', Integer, ForeignKey('role.id'))
+                          )
 
 
 class User(Base):
@@ -11,6 +18,8 @@ class User(Base):
     username = db.Column(db.String(144), nullable=False, unique=True)
     password = db.Column(db.String(144), nullable=False)
     email = db.Column(db.String(144), nullable=False)
+
+    roles = db.relationship("Role", secondary="user_role", backref='account')
 
     def __init__(self, name, username, password, email):
         self.name = name
@@ -44,3 +53,11 @@ class User(Base):
                     " GROUP BY Account.id;"
                     )
         return db.engine.execute(stmt)
+
+
+class Role(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    role = db.Column(db.String(20), nullable=False)
+
+    def __init__(self, name):
+        name = name
