@@ -19,7 +19,8 @@ class User(Base):
     password = db.Column(db.String(144), nullable=False)
     email = db.Column(db.String(144), nullable=False)
 
-    roles = db.relationship("Role", secondary="user_role", backref='account')
+    roles = db.relationship("Role", secondary="user_role",
+                            backref=db.backref('accounts', lazy=True))
 
     def __init__(self, name, username, password, email):
         self.name = name
@@ -40,10 +41,10 @@ class User(Base):
         return True
 
     def get_messages(self):
-        return db.relationship('Message', backref='account', lazy=True)
+        return db.relationship('Message', backref='accounts', lazy=True)
 
     def is_admin(self):
-        for role in roles:
+        for role in self.roles:
             if role.role == 'admin':
                 return True
         return False
