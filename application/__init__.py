@@ -1,12 +1,10 @@
 from flask import Flask
 app = Flask(__name__)
 
-from flask_login import current_user
-from flask_sqlalchemy import SQLAlchemy
-from functools import wraps
-
-
 # database
+from flask_sqlalchemy import SQLAlchemy
+
+
 import os
 
 if os.environ.get("HEROKU"):

@@ -11,12 +11,29 @@
         <tr>
             <th scope="col">#{{ msg.id }}</th>
             <th scope="col">{{ msg.date_created }}</th>
-            <th scope="col"><a href="{{ url_for('delete_message', message_id=msg.id) }}">Delete message</a></th>
+            <th scope="col">
+                User: {{ msg.username }}
+            </th>
+            <th scope="col">
+                {% if msg.date_created != msg.date_modified %}
+                Edited
+                {% endif %}
+            </th>
+            <th scope="col">
+                {% if (current_user.id == msg.user_id) or (current_user.is_admin == True) %}
+                <a href="{{ url_for('message_view', message_id=msg.id) }}">Edit message</a>
+                {% endif %}
+            </th>
+            <th scope="col">
+                {% if (current_user.id == msg.user_id) or (current_user.is_admin == True) %}
+                <a href="{{ url_for('delete_message', message_id=msg.id) }}">Delete message</a>
+                {% endif %}
+            </th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="3">{{ msg.message_text }}</td>
+            <td colspan="5">{{ msg.message_text }}</td>
         </tr>
     </tbody>
     {% endfor %}

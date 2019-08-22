@@ -1,7 +1,7 @@
-from application import app, db
 from flask import redirect, render_template, request, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user
 
+from application import app, db, login_required, login_manager
 from application.threads.models import Thread
 from application.threads.forms import ThreadForm
 
@@ -10,19 +10,19 @@ from application.messages.forms import MessageForm
 
 
 @app.route("/threads/", methods=["GET"])
-@login_required
+@login_required()
 def threads_index():
     return render_template("threads/list.html", threads=Thread.get_threads())
 
 
 @app.route("/threads/new/", methods=["GET"])
-@login_required
+@login_required()
 def threads_form():
     return render_template("threads/new.html", form=ThreadForm())
 
 
 @app.route("/threads/", methods=["POST"])
-@login_required
+@login_required()
 def threads_create():
     form = ThreadForm(request.form)
 
@@ -36,8 +36,10 @@ def threads_create():
 
 
 @app.route("/threads/<int:thread_id>/", methods=["GET"])
-@login_required
+@login_required()
 def threads_view(thread_id, form=None):
+    print('user ids €€€€€€€€€')
+    print(current_user.id)
     if form is None:
         form = MessageForm(request.form)
 
@@ -47,12 +49,16 @@ def threads_view(thread_id, form=None):
 
 
 @app.route("/delete/<int:message_id>/", methods=["GET"])
-@login_required
+@login_required()
 def delete_message(message_id, form=None):
     if form is None:
         form = MessageForm(request.form)
 
     m = Message.query.get(message_id)
+
+    if m.user_id != current_user.id and current_user.admin != False:
+        return redirect(url_for("threads_view", thread_id=m.thread_id))
+
     if m.original_post:
         Thread.delete_thread(m.thread_id)
         return redirect(url_for("threads_index"))
@@ -63,8 +69,40 @@ def delete_message(message_id, form=None):
     return render_template("threads/view.html", thread=t, messages=res, form=form)
 
 
+@app.route("/message/<int:message_id>/", methods=["GET"])
+@login_required()
+def message_view(message_id):
+    m = Message.query.get(message_id)
+
+    if m.user_id != current_user.id and current_user.admin != False:
+        return redirect(url_for("threads_view", thread_id=m.thread_id))
+
+    f = MessageForm()
+    f.message_text.data = m.message_text
+    return render_template("threads/edit.html", message=m, form=f)
+
+
+@app.route("/message/update/<int:message_id>/", methods=["POST"])
+@login_required()
+def message_update(message_id):
+    form = MessageForm(request.form)
+    m = Message.query.get(message_id)
+
+    if m.user_id != current_user.id and current_user.admin != False:
+        return redirect(url_for("threads_view", thread_id=m.thread_id))
+
+    if not form.validate():
+        return render_template("threads/edit.html", message=m, form=form)
+
+    m.message_text = form.message_text.data
+
+    db.session.commit()
+
+    return redirect(url_for("threads_view", thread_id=m.thread_id))
+
+
 @app.route("/threads/<int:thread_id>/", methods=["POST"])
-@login_required
+@login_required()
 def threads_reply(thread_id):
     form = MessageForm(request.form)
 

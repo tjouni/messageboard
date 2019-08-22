@@ -42,6 +42,12 @@ class User(Base):
     def get_messages(self):
         return db.relationship('Message', backref='account', lazy=True)
 
+    def is_admin(self):
+        for role in roles:
+            if role == 'admin':
+                return True
+        return False
+
     @staticmethod
     def get_user_list():
         stmt = text("SELECT Account.id, Account.username, Account.name, Account.email,"
@@ -59,5 +65,5 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     role = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, name):
-        name = name
+    def __init__(self, role):
+        self.role = role

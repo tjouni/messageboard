@@ -27,7 +27,9 @@ class Thread(Base):
         '''Return a tuple with thread and a list of messages'''
         t = Thread.query.get(thread_id)
 
-        stmt = text("SELECT id, date_created, message_text FROM Message"
+        stmt = text("SELECT Message.id, Message.date_created, Message.date_modified,"
+                    " message_text, user_id, username FROM Message"
+                    " JOIN Account ON Message.user_id = Account.id"
                     " WHERE thread_id = :tid").params(tid=t.id)
 
         res = db.engine.execute(stmt)
@@ -49,12 +51,6 @@ class Thread(Base):
     def delete_message(message_id):
         m = Message.query.get(message_id)
         db.session.delete(m)
-        db.session.commit()
-
-        stmt = text("SELECT id, date_created, message_text FROM Message"
-                    " WHERE thread_id = :tid").params(tid=m.thread_id)
-
-        res = db.engine.execute(stmt)
         db.session.commit()
 
     @staticmethod
