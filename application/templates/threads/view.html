@@ -12,7 +12,11 @@
             <th scope="col">#{{ msg.id }}</th>
             <th scope="col">{{ msg.date_created }}</th>
             <th scope="col">
+                {% if msg.username %}
                 User: {{ msg.username }}
+                {% else %}
+                User: DELETED USER
+                {% endif %}
             </th>
             <th scope="col">
                 {% if msg.date_created != msg.date_modified %}

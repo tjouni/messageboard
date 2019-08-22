@@ -29,7 +29,7 @@ class Thread(Base):
 
         stmt = text("SELECT Message.id, Message.date_created, Message.date_modified,"
                     " message_text, user_id, username FROM Message"
-                    " JOIN Account ON Message.user_id = Account.id"
+                    " LEFT JOIN Account ON Message.user_id = Account.id"
                     " WHERE thread_id = :tid").params(tid=t.id)
 
         res = db.engine.execute(stmt)
