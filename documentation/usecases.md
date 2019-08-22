@@ -1,10 +1,14 @@
 # Use cases
 
-### User
+### Unregistered user
 
   * Register a new account
-    * Modify or delete your own account
-      * Deleting an account doesn't delete messages or threads, instead 'DELETED USER' is shown in the username field
+
+
+### Registered ser
+
+  * Modify or delete your own account
+    * Deleting an account doesn't delete messages or threads, instead 'DELETED USER' is shown in the username field
   * List all threads which you have a permission (category) for
   * View messages in a thread
     * Messages are shown with username and basic message information
