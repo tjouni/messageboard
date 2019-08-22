@@ -54,8 +54,9 @@ def delete_message(message_id, form=None):
         form = MessageForm(request.form)
 
     m = Message.query.get(message_id)
+    u = current_user
 
-    if m.user_id != current_user.id and not current_user.is_admin():
+    if m.user_id != u.id and not u.is_admin():
         return redirect(url_for("threads_view", thread_id=m.thread_id))
 
     if m.original_post:
@@ -72,8 +73,9 @@ def delete_message(message_id, form=None):
 @login_required()
 def message_view(message_id):
     m = Message.query.get(message_id)
+    u = current_user
 
-    if m.user_id != current_user.id and not current_user.is_admin():
+    if m.user_id != u.id and not u.is_admin():
         return redirect(url_for("threads_view", thread_id=m.thread_id))
 
     f = MessageForm()
@@ -86,8 +88,9 @@ def message_view(message_id):
 def message_update(message_id):
     form = MessageForm(request.form)
     m = Message.query.get(message_id)
+    u = current_user
 
-    if m.user_id != current_user.id and not current_user.is_admin():
+    if m.user_id != u.id and not u.is_admin():
         return redirect(url_for("threads_view", thread_id=m.thread_id))
 
     if not form.validate():
