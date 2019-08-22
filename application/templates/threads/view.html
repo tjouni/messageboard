@@ -23,16 +23,17 @@
                 Edited
                 {% endif %}
             </th>
+            {% if (current_user.id == msg.user_id) or (current_user.is_admin()) %}
             <th scope="col">
-                {% if (current_user.id == msg.user_id) or (current_user.is_admin()) %}
                 <a href="{{ url_for('message_view', message_id=msg.id) }}">Edit message</a>
-                {% endif %}
             </th>
             <th scope="col">
-                {% if (current_user.id == msg.user_id) or (current_user.is_admin()) %}
                 <a href="{{ url_for('delete_message', message_id=msg.id) }}">Delete message</a>
-                {% endif %}
             </th>
+            {% else %}
+            <th scope="col"></th>
+            <th scope="col"></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
