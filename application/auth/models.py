@@ -44,7 +44,7 @@ class User(Base):
 
     def is_admin(self):
         for role in roles:
-            if role == 'admin':
+            if role.role == 'admin':
                 return True
         return False
 
