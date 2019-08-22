@@ -56,7 +56,7 @@ def delete_message(message_id, form=None):
 
     m = Message.query.get(message_id)
 
-    if m.user_id != current_user.id and current_user.admin != False:
+    if m.user_id != current_user.id and not current_user.is_admin():
         return redirect(url_for("threads_view", thread_id=m.thread_id))
 
     if m.original_post:
@@ -74,7 +74,7 @@ def delete_message(message_id, form=None):
 def message_view(message_id):
     m = Message.query.get(message_id)
 
-    if m.user_id != current_user.id and current_user.admin != False:
+    if m.user_id != current_user.id and not current_user.is_admin():
         return redirect(url_for("threads_view", thread_id=m.thread_id))
 
     f = MessageForm()
