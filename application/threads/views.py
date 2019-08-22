@@ -38,7 +38,6 @@ def threads_create():
 @app.route("/threads/<int:thread_id>/", methods=["GET"])
 @login_required()
 def threads_view(thread_id, form=None):
-    print('user ids €€€€€€€€€')
     print(current_user.id)
     if form is None:
         form = MessageForm(request.form)
