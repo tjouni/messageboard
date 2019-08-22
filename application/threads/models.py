@@ -57,9 +57,9 @@ class Thread(Base):
     @staticmethod
     def delete_thread(thread_id):
         t = Thread.query.get(thread_id)
-        stmt = text("DELETE FROM Message WHERE thread_id = :tid").params(
-            tid=thread_id)
-        res = db.engine.execute(stmt)
+
+        stmt = Message.__table__.delete().where(Message.thread_id == t.id)
+        db.engine.execute(stmt)
 
         db.session.delete(t)
         db.session.commit()

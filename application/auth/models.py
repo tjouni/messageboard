@@ -57,8 +57,7 @@ class User(Base):
                     "  JOIN Account AS a2 ON m2.user_id = Account.id"
                     "  WHERE m2.original_post = true) AS threadcount FROM Account "
                     " LEFT JOIN Message ON Message.user_id = Account.id  "
-                    " GROUP BY Account.id;"
-                    )
+                    " GROUP BY Account.id;")
         return db.engine.execute(stmt)
 
 
