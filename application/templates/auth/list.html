@@ -30,6 +30,9 @@
             {% if (current_user.id == user.id) or (current_user.is_admin()) %}
             <td><a href="{{ url_for('auth_view', user_id=user.id) }}">Modify user</a></td>
             <td><a href="{{ url_for('delete_user', user_id=user.id) }}">Delete user</a></td>
+            {% else %}
+            <td></td>
+            <td></td>
             {% endif %}
         </tr>
         {% endfor %}
