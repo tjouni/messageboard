@@ -87,7 +87,7 @@ def message_update(message_id):
     form = MessageForm(request.form)
     m = Message.query.get(message_id)
 
-    if m.user_id != current_user.id and current_user.admin != False:
+    if m.user_id != current_user.id and not current_user.is_admin():
         return redirect(url_for("threads_view", thread_id=m.thread_id))
 
     if not form.validate():
