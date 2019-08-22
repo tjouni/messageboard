@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 
 from application import app, db
 from application.auth.models import User
@@ -48,16 +48,17 @@ def auth_update(user_id):
     if not form.validate():
         return render_template("auth/view.html", user=u, form=form)
 
-    u.username = form.username.data
-    u.password = form.password.data
-    u.name = form.name.data
-    u.email = form.email.data
+    if u.id == current_user.id or current_user.is_admin():
+        u.username = form.username.data
+        u.password = form.password.data
+        u.name = form.name.data
+        u.email = form.email.data
 
-    try:
-        db.session.commit()
-    except IntegrityError:
-        db.session.rollback()
-        return render_template("auth/view.html", user=u, form=form, username_taken=True)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            return render_template("auth/view.html", user=u, form=form, username_taken=True)
 
     return redirect(url_for("auth_index"))
 
@@ -67,7 +68,10 @@ def auth_update(user_id):
 def auth_view(user_id):
     u = User.query.get(user_id)
     f = UserForm()
-    return render_template("auth/view.html", user=u, form=f)
+    if u.id == current_user.id or current_user.is_admin():
+        return render_template("auth/view.html", user=u, form=f)
+
+    return redirect(url_for("auth_index"))
 
 
 @app.route("/users/delete/<int:user_id>/", methods=["GET"])
@@ -75,10 +79,11 @@ def auth_view(user_id):
 def delete_user(user_id):
     u = User.query.get(user_id)
 
-    db.session.delete(u)
-    db.session.commit()
+    if u.id == current_user.id or current_user.is_admin():
+        db.session.delete(u)
+        db.session.commit()
 
-    return render_template("/auth/list.html", users=User.get_user_list())
+    return redirect(url_for("auth_index"))
 
 
 @app.route("/auth/", methods=["GET", "POST"])
