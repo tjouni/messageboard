@@ -10,6 +10,9 @@ class Message(Base):
     message_text = db.Column(db.String(), nullable=False)
     original_post = db.Column(db.Boolean, nullable=False)
 
+    user = db.relationship('User', backref=db.backref(
+        'message', passive_deletes=True))
+
     def __init__(self, message_text, thread_id, user_id, original_post=False):
         self.message_text = message_text
         self.thread_id = thread_id
