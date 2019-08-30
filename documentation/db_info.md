@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/tjouni/messageboard/master/documentation/diagram.png" width=500>
+<img src="https://raw.githubusercontent.com/tjouni/messageboard/master/documentation/diagram.png" width=800>
 
 ### Create table statements
 
