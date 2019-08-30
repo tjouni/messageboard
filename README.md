@@ -4,6 +4,7 @@ Keskustelufoorumi, jossa on käyttäjiä. Jokainen käyttäjä voi kuulua useamp
 
   * [Tietokantakaavio ja CREATE TABLE -lausekkeet](https://github.com/tjouni/messageboard/blob/master/documentation/db_info.md)
   * [Käyttötapaukset](https://github.com/tjouni/messageboard/blob/master/documentation/usecases.md)
+  * [Asennusohjeet](https://github.com/tjouni/messageboard/blob/master/documentation/installation.md)
   
   * [Sovellus herokussa](https://tjouni-messageboard.herokuapp.com/)
     * peruskäyttäjä: user/pass: erkki/esimerkki
