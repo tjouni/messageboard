@@ -8,5 +8,4 @@ Keskustelufoorumi, jossa on käyttäjiä. Jokainen käyttäjä voi kuulua useamp
   
   * [Sovellus herokussa](https://tjouni-messageboard.herokuapp.com/)
     * peruskäyttäjä: user/pass: erkki/esimerkki
-    * admin: admin/123
-    * Älä käytä oikeita salasanoja, ne säilötään plaintextinä
+    * admin: admin/1234
