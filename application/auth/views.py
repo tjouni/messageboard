@@ -53,7 +53,9 @@ def auth_update(user_id):
 
     if u.id == current_user.id or current_user.is_admin():
         u.username = form.username.data
-        u.password = form.password.data
+        pw_hash = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
+        u.password = pw_hash
         u.name = form.name.data
         u.email = form.email.data
 
@@ -95,15 +97,7 @@ def auth_login():
         return render_template("auth/loginform.html", form=LoginForm())
 
     form = LoginForm(request.form)
-
-    pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-
     user = User.query.filter_by(username=form.username.data).first()
-
-    print('hash', pw_hash)
-    print('pass', user.password)
-    print(bcrypt.check_password_hash(pw_hash, user.password))
-    bcrypt.check_password_hash(user.password, form.password.data)
 
     if not bcrypt.check_password_hash(user.password, form.password.data):
         return render_template("auth/loginform.html", form=form,
