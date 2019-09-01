@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from application import app, db
+from application import app, db, bcrypt
 from application.auth.models import User
 from application.auth.forms import UserForm, LoginForm
 from sqlalchemy.exc import IntegrityError
@@ -25,8 +25,10 @@ def auth_create():
     if not form.validate():
         return render_template("auth/new.html", form=form)
 
+    pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+
     u = User(name=form.name.data, username=form.username.data,
-             password=form.password.data, email=form.email.data)
+             password=pw_hash, email=form.email.data)
 
     db.session.add(u)
 
@@ -93,12 +95,17 @@ def auth_login():
         return render_template("auth/loginform.html", form=LoginForm())
 
     form = LoginForm(request.form)
-    # mahdolliset validoinnit
 
-    user = User.query.filter_by(
-        username=form.username.data, password=form.password.data).first()
+    pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
-    if not user:
+    user = User.query.filter_by(username=form.username.data).first()
+
+    print('hash', pw_hash)
+    print('pass', user.password)
+    print(bcrypt.check_password_hash(pw_hash, user.password))
+    bcrypt.check_password_hash(user.password, form.password.data)
+
+    if not bcrypt.check_password_hash(user.password, form.password.data):
         return render_template("auth/loginform.html", form=form,
                                error="Incorrect username or password")
 
