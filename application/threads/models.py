@@ -18,13 +18,13 @@ class Thread(Base):
         self.category_id = 0  # TODO
 
     @staticmethod
-    def get_threads():
-        '''Return a list of threads ordered by date modified'''
-        return Thread.query.order_by(Thread.date_modified.desc()).all()
+    def get_threads(page):
+        '''Return a paginated list of threads ordered by date modified'''
+        return Thread.query.order_by(Thread.date_modified.desc()).paginate(page, 10, False)
 
     @staticmethod
     def get_thread(thread_id):
-        '''Return a tuple with thread and a list of messages'''
+        '''Return a tuple with thread and a paginated list of messages'''
         t = Thread.query.get(thread_id)
 
         stmt = text("SELECT Message.id, Message.date_created, Message.date_modified,"
@@ -33,8 +33,8 @@ class Thread(Base):
                     " WHERE thread_id = :tid"
                     " ORDER BY Message.id ASC").params(tid=t.id)
 
-        res = db.engine.execute(stmt)
-        db.session.commit()
+        res = db.session.execute(stmt).fetchall()
+
         return (t, res)
 
     @staticmethod

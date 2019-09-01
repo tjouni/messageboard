@@ -40,9 +40,6 @@ class User(Base):
     def is_authenticated(self):
         return True
 
-    def get_messages(self):
-        return db.relationship('Message', backref='accounts', lazy=True)
-
     def is_admin(self):
         for role in self.roles:
             if role.role == 'admin':
@@ -51,6 +48,7 @@ class User(Base):
 
     @staticmethod
     def get_user_list():
+        '''Return a list with basic user information and statistics'''
         stmt = text("SELECT Account.id, Account.username, Account.name, Account.email,"
                     " COUNT(Message.id) as messagecount,"
                     " (SELECT COUNT(DISTINCT m2.id) FROM Message AS m2"

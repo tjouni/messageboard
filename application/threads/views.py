@@ -1,5 +1,6 @@
 from flask import redirect, render_template, request, url_for
 from flask_login import current_user
+from flask_paginate import Pagination, get_page_parameter
 
 from application import app, db, login_required, login_manager
 from application.threads.models import Thread
@@ -12,7 +13,17 @@ from application.messages.forms import MessageForm
 @app.route("/threads/", methods=["GET"])
 @login_required()
 def threads_index():
-    return render_template("threads/list.html", threads=Thread.get_threads())
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    threads = Thread.get_threads(page)
+
+    pagination = Pagination(page=page, total=threads.total,
+                            search=search, record_name='threads', css_framework='bootstrap4')
+    return render_template("threads/list.html", threads=threads.items, pagination=pagination)
 
 
 @app.route("/threads/new/", methods=["GET"])
@@ -38,11 +49,19 @@ def threads_create():
 @app.route("/threads/<int:thread_id>/", methods=["GET"])
 @login_required()
 def threads_view(thread_id, form=None):
-    print(current_user.id)
+    # search = False
+    # q = request.args.get('q')
+    # if q:
+    #     search = True
+
     if form is None:
         form = MessageForm(request.form)
 
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
     (t, res) = Thread.get_thread(thread_id)
+
+    # pagination = Pagination(page=page, total=res.total,
+    #                         search=search, record_name='threads', css_framework='bootstrap4')
 
     return render_template("threads/view.html", thread=t, messages=res, form=form)
 

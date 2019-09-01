@@ -1,14 +1,14 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from application import app, db, bcrypt
+from application import app, bcrypt, db, login_required
 from application.auth.models import User
 from application.auth.forms import UserForm, LoginForm
 from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/users/", methods=["GET"])
-@login_required
+@login_required()
 def auth_index():
     return render_template("auth/list.html", users=User.get_user_list())
 
@@ -42,7 +42,7 @@ def auth_create():
 
 
 @app.route("/users/<int:user_id>/", methods=["POST"])
-@login_required
+@login_required()
 def auth_update(user_id):
     form = UserForm(request.form)
 
@@ -69,7 +69,7 @@ def auth_update(user_id):
 
 
 @app.route("/users/<int:user_id>/", methods=["GET"])
-@login_required
+@login_required()
 def auth_view(user_id):
     u = User.query.get(user_id)
     f = UserForm()
@@ -80,7 +80,7 @@ def auth_view(user_id):
 
 
 @app.route("/users/delete/<int:user_id>/", methods=["GET"])
-@login_required
+@login_required()
 def delete_user(user_id):
     u = User.query.get(user_id)
 
