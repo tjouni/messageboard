@@ -27,8 +27,8 @@ class Thread(Base):
     def get_thread(thread_id, page):
         '''Return a tuple with thread and a paginated list of messages'''
         t = Thread.query.get(thread_id)
-        messages = db.session.query(Message).outerjoin(User).add_columns(
-            User.username).filter(Message.thread_id == thread_id).paginate(page, 10, False)
+        messages = db.session.query(Message).outerjoin(User).add_columns(User.username).filter(
+            Message.thread_id == thread_id).order_by(Message.id).paginate(page, 10, False)
 
         return (t, messages)
 
