@@ -49,21 +49,21 @@ def threads_create():
 @app.route("/threads/<int:thread_id>/", methods=["GET"])
 @login_required()
 def threads_view(thread_id, form=None):
-    # search = False
-    # q = request.args.get('q')
-    # if q:
-    #     search = True
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
 
     if form is None:
         form = MessageForm(request.form)
 
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
-    (t, res) = Thread.get_thread(thread_id)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    (t, messages) = Thread.get_thread(thread_id, page)
 
-    # pagination = Pagination(page=page, total=res.total,
-    #                         search=search, record_name='threads', css_framework='bootstrap4')
+    pagination = Pagination(page=page, total=messages.total,
+                            search=search, record_name='messages', css_framework='bootstrap4')
 
-    return render_template("threads/view.html", thread=t, messages=res, form=form)
+    return render_template("threads/view.html", thread=t, messages=messages.items, form=form, pagination=pagination)
 
 
 @app.route("/delete/<int:message_id>/", methods=["GET"])

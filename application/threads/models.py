@@ -1,6 +1,7 @@
 from application import db
 from application.models import Base
 from application.messages.models import Message
+from application.auth.models import User
 
 
 from sqlalchemy.sql import text
@@ -23,19 +24,13 @@ class Thread(Base):
         return Thread.query.order_by(Thread.date_modified.desc()).paginate(page, 10, False)
 
     @staticmethod
-    def get_thread(thread_id):
+    def get_thread(thread_id, page):
         '''Return a tuple with thread and a paginated list of messages'''
         t = Thread.query.get(thread_id)
+        messages = db.session.query(Message).outerjoin(User).add_columns(
+            User.username).filter(Message.thread_id == thread_id).paginate(page, 10, False)
 
-        stmt = text("SELECT Message.id, Message.date_created, Message.date_modified,"
-                    " message_text, user_id, username FROM Message"
-                    " LEFT JOIN Account ON Message.user_id = Account.id"
-                    " WHERE thread_id = :tid"
-                    " ORDER BY Message.id ASC").params(tid=t.id)
-
-        res = db.session.execute(stmt).fetchall()
-
-        return (t, res)
+        return (t, messages)
 
     @staticmethod
     def create_thread(title, message_text, user_id):

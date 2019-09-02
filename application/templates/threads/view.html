@@ -9,8 +9,8 @@
     {% for msg in messages %}
     <thead>
         <tr>
-            <th scope="col">#{{ msg.id }}</th>
-            <th scope="col">{{ msg.date_created }}</th>
+            <th scope="col">#{{ msg[0].id }}</th>
+            <th scope="col">{{ msg[0].date_created }}</th>
             <th scope="col">
                 {% if msg.username %}
                 User: {{ msg.username }}
@@ -19,16 +19,16 @@
                 {% endif %}
             </th>
             <th scope="col">
-                {% if msg.date_created != msg.date_modified %}
+                {% if msg[0].date_created != msg[0].date_modified %}
                 Edited
                 {% endif %}
             </th>
-            {% if (current_user.id == msg.user_id) or (current_user.is_admin()) %}
+            {% if (current_user.id == msg[0].user_id) or (current_user.is_admin()) %}
             <th scope="col">
-                <a href="{{ url_for('message_view', message_id=msg.id) }}">Edit message</a>
+                <a href="{{ url_for('message_view', message_id=msg[0].id) }}">Edit message</a>
             </th>
             <th scope="col">
-                <a href="{{ url_for('delete_message', message_id=msg.id) }}">Delete message</a>
+                <a href="{{ url_for('delete_message', message_id=msg[0].id) }}">Delete message</a>
             </th>
             {% else %}
             <th scope="col"></th>
@@ -38,12 +38,15 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="5">{{ msg.message_text }}</td>
+            <td colspan="5">{{ msg[0].message_text }}</td>
         </tr>
     </tbody>
     {% endfor %}
 </table>
 
+{{ pagination.info }}
+{{ pagination.links }}
+<br>
 
 <h3>Post reply</h3>
 <br>
