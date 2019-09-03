@@ -17,7 +17,7 @@ class Thread(Base):
 
     def __init__(self, title, category_id):
         self.title = title
-        self.category_id = 0  # TODO
+        self.category_id = category_id
 
     @staticmethod
     def get_threads(page):
@@ -34,8 +34,8 @@ class Thread(Base):
         return (t, messages)
 
     @staticmethod
-    def create_thread(title, message_text, user_id):
-        t = Thread(title=title, category_id=0)
+    def create_thread(title, message_text, user_id, category_id):
+        t = Thread(title=title, category_id=category_id)
 
         db.session.add(t)
         db.session.flush()

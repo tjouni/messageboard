@@ -29,19 +29,23 @@ def threads_index():
 @app.route("/threads/new/", methods=["GET"])
 @login_required()
 def threads_form():
-    return render_template("threads/new.html", form=ThreadForm())
+    form = ThreadForm()
+    form.thread_category.choices = current_user.get_category_names()
+    print(form.thread_category.choices)
+    return render_template("threads/new.html", form=form)
 
 
 @app.route("/threads/", methods=["POST"])
 @login_required()
 def threads_create():
     form = ThreadForm(request.form)
+    form.thread_category.choices = current_user.get_category_names()
 
     if not form.validate():
         return render_template("threads/new.html", form=form)
 
     Thread.create_thread(
-        title=form.title.data, message_text=form.message_text.data, user_id=current_user.id)
+        title=form.title.data, message_text=form.message_text.data, user_id=current_user.id, category_id=form.thread_category.data)
 
     return redirect(url_for("threads_index"))
 

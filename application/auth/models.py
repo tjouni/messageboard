@@ -62,6 +62,12 @@ class User(Base):
             ids.append(category_row.id)
         return ids
 
+    def get_category_names(self):
+        names = []
+        for category_row in self.categories:
+            names.append((category_row.id, category_row.name))
+        return names
+
     @staticmethod
     def get_user_list():
         '''Return a list with basic user information and statistics'''
