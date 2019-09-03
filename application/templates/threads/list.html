@@ -15,8 +15,6 @@
     <tbody>
         {% for thread in threads %}
         <tr>
-            <td>{{ loop.index + pagination.skip }}</td>
-
             <td><a href="{{ url_for('threads_view', thread_id=thread.id) }}">{{ thread.title }}</a></td>
             <td>{{ thread.date_created }}</td>
             <td>{{ thread.date_modified }}</td>
