@@ -74,8 +74,9 @@ from application.categories import models
 from application.categories import views
 
 
-# login functionality, part 2
-from application.auth.models import User
+# login functionality, part two
+from application.auth.models import User, Role
+from application.categories.models import Category
 
 
 @login_manager.user_loader
@@ -83,7 +84,16 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
+# initiliaze database with default category and admin role
 try:
     db.create_all()
+    if not Role.query.first():
+        admin_role = Role("admin")
+        db.session.add(admin_role)
+        db.session.commit()
+    if not Category.query.first():
+        default_category = Category('default')
+        db.session.add(default_category)
+        db.session.commit()
 except:
     pass
