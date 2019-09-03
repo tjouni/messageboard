@@ -3,11 +3,19 @@ from application.models import Base
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.sql import text
 
+
 association_table = Table('user_role', Base.metadata,
                           Column('account_id', Integer,
                                  ForeignKey('account.id')),
                           Column('role_id', Integer, ForeignKey('role.id'))
                           )
+
+association_table2 = Table('user_category', Base.metadata,
+                           Column('account_id', Integer,
+                                  ForeignKey('account.id')),
+                           Column('category_id', Integer,
+                                  ForeignKey('category.id'))
+                           )
 
 
 class User(Base):
@@ -21,6 +29,8 @@ class User(Base):
 
     roles = db.relationship("Role", secondary="user_role",
                             backref=db.backref('accounts', lazy=True))
+    categories = db.relationship("Category", secondary="user_category",
+                                 backref=db.backref('accounts', lazy=True))
 
     def __init__(self, name, username, password, email):
         self.name = name
@@ -46,6 +56,12 @@ class User(Base):
                 return True
         return False
 
+    def get_category_ids(self):
+        ids = []
+        for category_row in self.categories:
+            ids.append(category_row.id)
+        return ids
+
     @staticmethod
     def get_user_list():
         '''Return a list with basic user information and statistics'''
@@ -56,7 +72,13 @@ class User(Base):
                     "  WHERE m2.original_post = true) AS threadcount FROM Account "
                     " LEFT JOIN Message ON Message.user_id = Account.id  "
                     " GROUP BY Account.id;")
-        return db.engine.execute(stmt)
+        return db.session.execute(stmt)
+
+    def get_category_ids(self):
+        ids = []
+        for category_row in self.categories:
+            ids.append(category_row.id)
+        return ids
 
 
 class Role(db.Model):

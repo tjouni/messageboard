@@ -3,8 +3,9 @@ from application.models import Base
 from application.messages.models import Message
 from application.auth.models import User
 
-
 from sqlalchemy.sql import text
+
+from flask_login import current_user
 
 
 class Thread(Base):
@@ -20,8 +21,8 @@ class Thread(Base):
 
     @staticmethod
     def get_threads(page):
-        '''Return a paginated list of threads ordered by date modified'''
-        return Thread.query.order_by(Thread.date_modified.desc()).paginate(page, 10, False)
+        '''Return a paginated list of threads, filtered by user category and ordered by date modified'''
+        return Thread.query.order_by(Thread.date_modified.desc()).filter(Thread.category_id.in_(current_user.get_category_ids())).paginate(page, 10, False)
 
     @staticmethod
     def get_thread(thread_id, page):

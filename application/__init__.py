@@ -51,8 +51,8 @@ def login_required(role="ANY"):
             if role != "ANY":
                 unauthorized = True
 
-                for user_role in current_user.roles():
-                    if user_role == role:
+                for role_row in current_user.roles:
+                    if role_row.role == role:
                         unauthorized = False
                         break
 
@@ -71,6 +71,7 @@ from application.threads import models
 from application.threads import views
 from application.auth import views
 from application.categories import models
+from application.categories import views
 
 
 # login functionality, part 2
