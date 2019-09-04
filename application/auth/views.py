@@ -45,11 +45,10 @@ def auth_create():
 @login_required()
 def auth_update(user_id):
     form = UserForm(request.form)
+    u = User.query.get(user_id)
 
     if not form.validate():
         return render_template("auth/view.html", user=u, form=form)
-
-    u = User.query.get(user_id)
 
     if u.id == current_user.id or current_user.is_admin():
         u.username = form.username.data
