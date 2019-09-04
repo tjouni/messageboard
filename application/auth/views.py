@@ -4,6 +4,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from application import app, bcrypt, db, login_required
 from application.auth.models import User
 from application.auth.forms import UserForm, LoginForm
+from application.categories.models import Category
 from sqlalchemy.exc import IntegrityError
 
 
@@ -34,6 +35,8 @@ def auth_create():
 
     try:
         db.session.commit()
+        default_category = db.session.query(Category).get(1)
+        u.categories.add(default_category)
     except IntegrityError:
         db.session.rollback()
         return render_template("auth/new.html", form=form, username_taken=True)
