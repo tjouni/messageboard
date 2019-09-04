@@ -34,9 +34,9 @@ def auth_create():
     db.session.add(u)
 
     try:
-        db.session.commit()
         default_category = db.session.query(Category).get(1)
-        u.categories.add(default_category)
+        u.categories.append(default_category)
+        db.session.commit()
     except IntegrityError:
         db.session.rollback()
         return render_template("auth/new.html", form=form, username_taken=True)
