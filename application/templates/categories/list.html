@@ -5,7 +5,8 @@
 <h4>Categories</h4>
 <br>
 
-<p><strong>WARNING: Deleting a category deletes all threads in category</strong></p>
+<p><strong>WARNING: Deleting a category deletes all threads in category. Default category can not be deleted</strong>
+</p>
 <p>Add categories for users under user management</p>
 <table class="table">
     <thead>
@@ -25,7 +26,7 @@
             <td>{{ category.name }}</td>
             <td>{{ category.threadcount }}</td>
             <td>{{ category.usercount }}</td>
-            <td><a href="{{ url_for('categories_index', category_id=category.id) }}">Modify category</a></td>
+            <td><a href="{{ url_for('categories_view', category_id=category.id) }}">Modify category</a></td>
             {% if category.id != 1 %}
             <td><a href="{{ url_for('delete_category', category_id=category.id) }}">Delete category</a></td>
             {% else %}

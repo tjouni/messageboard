@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h4>Modify category: {{ category.name }}</h4><br>
+<p>Leaving a field empty keeps the original value</p>
+<form method="POST" action="{{ url_for('categories_update', category_id=category.id) }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                {{ form.name.label }}
+            </div>
+            <div class="col-2">
+                {{ form.name(value = category.name) }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                    {% if category_name_taken %}
+                    <li>Category name must be unique</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
