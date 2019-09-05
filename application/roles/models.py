@@ -15,7 +15,7 @@ class Role(db.Model):
     @staticmethod
     def get_role_list():
         stmt = text("SELECT Role.id, Role.role,"
-                    " (SELECT COUNT(a.id) FROM Role as r2"
+                    " (SELECT COUNT(DISTINCT a.id) FROM Role as r2"
                     "  JOIN user_role AS ur ON Role.id = ur.role_id"
                     "  JOIN account AS a ON ur.account_id = a.id) AS usercount"
                     " FROM Role"
