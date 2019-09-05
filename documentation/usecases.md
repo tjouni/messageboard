@@ -17,12 +17,11 @@
     DELETE FROM account WHERE account.id = ?
     ```
   * List all threads which you have a permission (category) for
-  ```
-  SELECT thread.id AS thread_id, thread.date_created AS thread_date_created,
-         thread.date_modified AS thread_date_modified, thread.title AS thread_title,
-         thread.category_id AS thread_category_id
-  FROM thread
-  ```
+    ```
+    SELECT thread.id AS thread_id, thread.date_created AS thread_date_created,
+           thread.date_modified AS thread_date_modified, thread.title AS thread_title,
+           thread.category_id AS thread_category_id FROM thread
+    ```
   * View messages in a thread
     * Messages are shown with username and basic message information
     * Modify or delete your own messages
