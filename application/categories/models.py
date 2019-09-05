@@ -11,6 +11,9 @@ class Category(db.Model):
     def __init__(self, name):
         self.name = name
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def get_category_list():
         stmt = text("SELECT Category.id, Category.name,"

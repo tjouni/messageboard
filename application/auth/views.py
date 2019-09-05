@@ -67,6 +67,8 @@ def auth_update(user_id):
             u.name = form.name.data
         if form.email.data:
             u.email = form.email.data
+        u.roles = form.role.data
+        u.categories = form.category.data
 
         try:
             db.session.commit()
@@ -81,9 +83,9 @@ def auth_update(user_id):
 @login_required()
 def auth_view(user_id):
     u = User.query.get(user_id)
-    f = UpdateUserForm()
+    form = UpdateUserForm(request.form)
     if u.id == current_user.id or current_user.is_admin():
-        return render_template("auth/view.html", user=u, form=f)
+        return render_template("auth/view.html", user=u, form=form)
 
     return redirect(url_for("auth_index"))
 

@@ -9,6 +9,9 @@ class Role(db.Model):
     def __init__(self, role):
         self.role = role
 
+    def __str__(self):
+        return self.role
+
     @staticmethod
     def get_role_list():
         stmt = text("SELECT Role.id, Role.role,"
