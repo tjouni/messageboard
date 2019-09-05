@@ -2,17 +2,19 @@
 
 {% block body %}
 <h4>{{ thread.title }}</h4>
-<p>Date created: {{ thread.date_created }}</p>
+<p>Date created: {{ thread.date_created|datetime }}</p>
 <br>
 
 <table class="table">
-    {% for msg in messages %}
     <thead>
         <tr>
             <th scope="col">Message #</th>
             <th scope="col">Time</th>
             <th scope="col">Username</th>
         </tr>
+    </thead>
+    <tbody>
+        {% for msg in messages %}
         <tr>
             <td scope="col">#{{ msg[0].id }}</td>
             <td scope="col">{{ msg[0].date_created|datetime }}</td>
@@ -40,13 +42,12 @@
             <td scope="col"></td>
             {% endif %}
         </tr>
-    </thead>
-    <tbody>
         <tr>
             <td colspan="5">{{ msg[0].message_text }}</td>
         </tr>
+        {% endfor %}
     </tbody>
-    {% endfor %}
+
 </table>
 
 {{ pagination.info }}
