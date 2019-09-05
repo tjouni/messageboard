@@ -72,6 +72,8 @@ from application.threads import views
 from application.auth import views
 from application.categories import models
 from application.categories import views
+from application.roles import models
+from application.roles import views
 
 
 # login functionality, part two

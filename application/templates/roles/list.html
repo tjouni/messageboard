@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h4>Roles</h4>
+<br>
+
+<p>Add roles for users under user management. Admin role can not be deleted</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Role name</th>
+            <th scope="col"># of users</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for role in roles %}
+        <tr>
+            <td>{{ role.id }}</td>
+            <td>{{ role.role }}</td>
+            <td>{{ role.usercount }}</td>
+            {% if role.id != 1 %}
+            <td><a href="{{ url_for('delete_role', role_id=role.id) }}">Delete role</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+<br>
+
+<h3>Add new role</h3>
+<form method="POST" action="{{ url_for('roles_index') }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                {{ form.name.label }}
+            </div>
+            <div class="col-2">
+                {{ form.name }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                    {% if role_name_taken %}
+                    <li>role name must be unique</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from application.roles.models import Role
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.sql import text
 
@@ -79,11 +80,3 @@ class User(Base):
                     " LEFT JOIN Message ON Message.user_id = Account.id  "
                     " GROUP BY Account.id;")
         return db.session.execute(stmt)
-
-
-class Role(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(20), nullable=False)
-
-    def __init__(self, role):
-        self.role = role
