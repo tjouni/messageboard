@@ -51,4 +51,9 @@
   * All basic user functionalities
   * Remove and modify any user account
   * Remove and modify any message
+  * Add and remove roles and categories
+    ```
+    INSERT INTO role (role) VALUES (?);
+    INSERT INTO category (name) VALUES (?);
+    ```
   
