@@ -31,14 +31,14 @@
                     <a class="nav-link" href="{{ url_for('threads_form') }} ">Create thread</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth_index') }} ">User management</a>
+                    <a class="nav-link" href="{{ url_for('auth_index') }} ">Users</a>
                 </li>
                 {% if current_user.is_admin() %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('categories_index') }} ">Category management</a>
+                    <a class="nav-link" href="{{ url_for('categories_index') }} ">Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth_index') }} ">List users</a>
+                    <a class="nav-link" href="{{ url_for('auth_index') }} ">Roles</a>
                 </li>
                 {% endif %}
             </ul>

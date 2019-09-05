@@ -80,12 +80,6 @@ class User(Base):
                     " GROUP BY Account.id;")
         return db.session.execute(stmt)
 
-    def get_category_ids(self):
-        ids = []
-        for category_row in self.categories:
-            ids.append(category_row.id)
-        return ids
-
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)

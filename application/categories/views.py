@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for
 
 from application import app, bcrypt, db, login_required
 from application.categories.models import Category
-from application.categories.forms import CategoryForm
+from application.categories.forms import CategoryForm, NewCategoryForm
 from application.threads.models import Thread
 from sqlalchemy.exc import IntegrityError
 
@@ -10,13 +10,26 @@ from sqlalchemy.exc import IntegrityError
 @app.route("/categories/", methods=["GET"])
 @login_required("admin")
 def categories_index():
-    return render_template("categories/list.html", categories=Category.get_category_list())
+    form = NewCategoryForm()
+    return render_template("categories/list.html", categories=Category.get_category_list(), form=form)
 
 
-@app.route("/categories/new/", methods=["GET"])
+@app.route("/categories/", methods=["POST"])
 @login_required("admin")
 def categories_create():
-    return None
+    form = NewCategoryForm(request.form)
+
+    if not form.validate():
+        return render_template("categories/list.html", categories=Category.get_category_list(), form=form)
+
+    category = Category(form.name.data)
+    try:
+        db.session.add(category)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return render_template("categories/list.html", categories=Category.get_category_list(), form=form, category_name_taken=True)
+    return render_template("categories/list.html", categories=Category.get_category_list(), form=form)
 
 
 @app.route("/categories/<int:category_id>/", methods=["GET"])

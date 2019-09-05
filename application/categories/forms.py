@@ -8,3 +8,10 @@ class CategoryForm(FlaskForm):
 
     class Meta:
         csrf = False
+
+
+class NewCategoryForm(FlaskForm):
+    name = StringField("Category name", [validators.Length(min=1)])
+
+    class Meta:
+        csrf = False
