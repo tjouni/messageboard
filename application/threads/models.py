@@ -12,8 +12,8 @@ class Thread(Base):
     title = db.Column(db.String(64), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'),
                             nullable=False, index=True)
-
     messages = db.relationship("Message", backref='thread', lazy=True)
+    items_per_page = 10
 
     def __init__(self, title, category_id):
         self.title = title
@@ -22,14 +22,14 @@ class Thread(Base):
     @staticmethod
     def get_threads(page):
         '''Return a paginated list of threads, filtered by user category and ordered by date modified'''
-        return Thread.query.order_by(Thread.date_modified.desc()).filter(Thread.category_id.in_(current_user.get_category_ids())).paginate(page, 10, False)
+        return Thread.query.order_by(Thread.date_modified.desc()).filter(Thread.category_id.in_(current_user.get_category_ids())).paginate(page, Thread.items_per_page, False)
 
     @staticmethod
     def get_thread(thread_id, page):
         '''Return a tuple with thread and a paginated list of messages'''
         t = Thread.query.get(thread_id)
         messages = db.session.query(Message).outerjoin(User).add_columns(User.username).filter(
-            Message.thread_id == thread_id).order_by(Message.id).paginate(page, 10, False)
+            Message.thread_id == thread_id).order_by(Message.id).paginate(page, Thread.items_per_page, False)
 
         return (t, messages)
 

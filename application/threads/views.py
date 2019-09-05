@@ -68,7 +68,6 @@ def threads_view(thread_id, form=None):
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     (t, messages) = Thread.get_thread(thread_id, page)
-
     pagination = Pagination(page=page, total=messages.total,
                             search=search, record_name='messages', css_framework='bootstrap4')
 
