@@ -21,8 +21,21 @@ CREATE TABLE role (
 );
 CREATE TABLE category (
 	id INTEGER NOT NULL,
-	name_text VARCHAR NOT NULL,
-	PRIMARY KEY (id)
+	name VARCHAR(50) NOT NULL,
+	PRIMARY KEY (id),
+	UNIQUE (name)
+);
+CREATE TABLE user_role (
+	account_id INTEGER,
+	role_id INTEGER,
+	FOREIGN KEY(account_id) REFERENCES account (id),
+	FOREIGN KEY(role_id) REFERENCES role (id)
+);
+CREATE TABLE user_category (
+	account_id INTEGER,
+	category_id INTEGER,
+	FOREIGN KEY(account_id) REFERENCES account (id),
+	FOREIGN KEY(category_id) REFERENCES category (id)
 );
 CREATE TABLE thread (
 	id INTEGER NOT NULL,
@@ -34,12 +47,6 @@ CREATE TABLE thread (
 	FOREIGN KEY(category_id) REFERENCES category (id)
 );
 CREATE INDEX ix_thread_category_id ON thread (category_id);
-CREATE TABLE user_role (
-	account_id INTEGER,
-	role_id INTEGER,
-	FOREIGN KEY(account_id) REFERENCES account (id),
-	FOREIGN KEY(role_id) REFERENCES role (id)
-);
 CREATE TABLE message (
 	id INTEGER NOT NULL,
 	date_created DATETIME,
@@ -53,4 +60,5 @@ CREATE TABLE message (
 	FOREIGN KEY(user_id) REFERENCES account (id) ON DELETE SET NULL,
 	CHECK (original_post IN (0, 1))
 );
+CREATE INDEX ix_message_thread_id ON message (thread_id);
 ```
