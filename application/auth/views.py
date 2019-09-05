@@ -67,8 +67,9 @@ def auth_update(user_id):
             u.name = form.name.data
         if form.email.data:
             u.email = form.email.data
-        u.roles = form.role.data
-        u.categories = form.category.data
+        if current_user.is_admin():
+            u.roles = form.role.data
+            u.categories = form.category.data
 
         try:
             db.session.commit()
