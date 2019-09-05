@@ -56,4 +56,10 @@
     INSERT INTO role (role) VALUES (?);
     INSERT INTO category (name) VALUES (?);
     ```
-  
+  * Modify categories and roles for all users
+    ```
+    INSERT INTO user_role (account_id, role_id) VALUES (?, ?);
+    DELETE FROM user_role (account_id, role_id) WHERE account_id = ? AND role_id = ?;
+    INSERT INTO category_role (account_id, category_id) VALUES (?,?);
+    DELETE FROM user_category (account_id, category_id) WHERE account_id = ? AND category_id = ?;
+    ```
