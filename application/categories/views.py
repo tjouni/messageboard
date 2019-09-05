@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for
 
 from application import app, bcrypt, db, login_required
 from application.categories.models import Category
+from application.threads.models import Thread
 
 
 @app.route("/categories/", methods=["GET"])
@@ -16,9 +17,14 @@ def categories_create():
     return None
 
 
-@app.route("/categoriess/delete/<int:category_id>/", methods=["GET"])
+@app.route("/categories/delete/<int:category_id>/", methods=["GET"])
 @login_required("admin")
 def delete_category(category_id):
-    u = Category.query.get(category_id)
-
-    return redirect(url_for("auth_index"))
+    cat = Category.query.get(category_id)
+    threads = db.session.query(Thread).filter(
+        Thread.category_id == category_id)
+    for thread in threads:
+        Thread.delete_thread(thread.id)
+    db.session.delete(cat)
+    db.session.commit()
+    return redirect(url_for("categories_index"))
