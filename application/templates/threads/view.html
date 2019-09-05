@@ -9,13 +9,18 @@
     {% for msg in messages %}
     <thead>
         <tr>
+            <th scope="col">Message #</th>
+            <th scope="col">Time</th>
+            <th scope="col">Username</th>
+        </tr>
+        <tr>
             <td scope="col">#{{ msg[0].id }}</td>
             <td scope="col">{{ msg[0].date_created|datetime }}</td>
             <td scope="col">
                 {% if msg.username %}
-                User: {{ msg.username }}
+                {{ msg.username }}
                 {% else %}
-                User: DELETED USER
+                DELETED USER
                 {% endif %}
             </td>
             <td scope="col">
