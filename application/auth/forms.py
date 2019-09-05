@@ -18,7 +18,8 @@ class NewUserForm(FlaskForm):
     username = StringField("Username", [validators.Length(min=1, max=144)])
     password = PasswordField("Password", [validators.Length(min=1, max=144)])
     name = StringField("Full name", [validators.Length(min=1, max=144)])
-    email = StringField("E-mail", [validators.Length(min=1, max=144)])
+    email = StringField(
+        "E-mail", [validators.Length(min=1, max=144), validators.Email()])
 
     class Meta:
         csrf = False
@@ -31,7 +32,8 @@ class UpdateUserForm(FlaskForm):
     repeat_password = PasswordField(
         "Repeat password", [validators.Length(max=144)])
     name = StringField("Full name", [validators.Length(min=1, max=144)])
-    email = StringField("E-mail", [validators.Length(min=1, max=144)])
+    email = StringField(
+        "E-mail", [validators.Length(min=1, max=144), validators.Email()])
 
     role = QuerySelectMultipleField(
         'Role',
