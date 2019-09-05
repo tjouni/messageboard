@@ -16,14 +16,20 @@
     ```
     DELETE FROM account WHERE account.id = ?
     ```
-  * TODO: List all threads which you have a permission (category) for
+  * List all threads which you have a permission (category) for
+    ```
+    SELECT thread.id AS thread_id, thread.date_created AS thread_date_created,
+           thread.date_modified AS thread_date_modified, thread.title AS thread_title,
+           thread.category_id AS thread_category_id FROM thread
+    ```
   * View messages in a thread
     * Messages are shown with username and basic message information
     * Modify or delete your own messages
       * Deleting the first message in a thread deletes the whole thread
     * Edited messages have an 'EDITED'-tag
     ```
-    SELECT Message.id, Message.date_created, Message.date_modified, message_text, user_id, username FROM Message
+    SELECT Message.id, Message.date_created, Message.date_modified, message_text, user_id, username
+    FROM Message
     LEFT JOIN Account ON Message.user_id = Account.id
     WHERE thread_id = ?
     ORDER BY Message.id ASC
@@ -45,4 +51,15 @@
   * All basic user functionalities
   * Remove and modify any user account
   * Remove and modify any message
-  
+  * Add and remove roles and categories
+    ```
+    INSERT INTO role (role) VALUES (?);
+    INSERT INTO category (name) VALUES (?);
+    ```
+  * Modify categories and roles for all users
+    ```
+    INSERT INTO user_role (account_id, role_id) VALUES (?, ?);
+    DELETE FROM user_role (account_id, role_id) WHERE account_id = ? AND role_id = ?;
+    INSERT INTO category_role (account_id, category_id) VALUES (?,?);
+    DELETE FROM user_category (account_id, category_id) WHERE account_id = ? AND category_id = ?;
+    ```
