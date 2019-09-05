@@ -53,7 +53,7 @@ def roles_update(Roles_id):
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        return render_template("roles/view.html", role=role, form=form, Roles_name_taken=True)
+        return render_template("roles/view.html", role=role, form=form, role_name_taken=True)
     return redirect(url_for("roles_index"))
 
 
