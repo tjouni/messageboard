@@ -9,30 +9,30 @@
     {% for msg in messages %}
     <thead>
         <tr>
-            <th scope="col">#{{ msg[0].id }}</th>
-            <th scope="col">{{ msg[0].date_created }}</th>
-            <th scope="col">
+            <td scope="col">#{{ msg[0].id }}</td>
+            <td scope="col">{{ msg[0].date_created|datetime }}</td>
+            <td scope="col">
                 {% if msg.username %}
                 User: {{ msg.username }}
                 {% else %}
                 User: DELETED USER
                 {% endif %}
-            </th>
-            <th scope="col">
+            </td>
+            <td scope="col">
                 {% if msg[0].date_created != msg[0].date_modified %}
                 Edited
                 {% endif %}
-            </th>
+            </td>
             {% if (current_user.id == msg[0].user_id) or (current_user.is_admin()) %}
-            <th scope="col">
+            <td scope="col">
                 <a href="{{ url_for('message_view', message_id=msg[0].id) }}">Edit message</a>
-            </th>
-            <th scope="col">
+            </td>
+            <td scope="col">
                 <a href="{{ url_for('delete_message', message_id=msg[0].id) }}">Delete message</a>
-            </th>
+            </td>
             {% else %}
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <td scope="col"></td>
+            <td scope="col"></td>
             {% endif %}
         </tr>
     </thead>

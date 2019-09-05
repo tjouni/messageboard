@@ -10,6 +10,11 @@ from application.messages.models import Message
 from application.messages.forms import MessageForm
 
 
+# datetime custom filter
+def datetimeformat(value, format='%d-%m-%Y %H:%M:%s'):
+    return value.strftime(format)
+
+
 @app.route("/threads/", methods=["GET"])
 @login_required()
 def threads_index():

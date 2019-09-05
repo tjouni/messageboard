@@ -3,7 +3,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from application import app, bcrypt, db, login_required
 from application.auth.models import User
-from application.auth.forms import UserForm, LoginForm
+from application.auth.forms import LoginForm, NewUserForm, UpdateUserForm
 from application.categories.models import Category
 from sqlalchemy.exc import IntegrityError
 
@@ -16,12 +16,12 @@ def auth_index():
 
 @app.route("/auth/new/", methods=["GET"])
 def auth_form():
-    return render_template("auth/new.html", form=UserForm())
+    return render_template("auth/new.html", form=NewUserForm())
 
 
 @app.route("/auth/new/", methods=["POST"])
 def auth_create():
-    form = UserForm(request.form)
+    form = NewUserForm(request.form)
 
     if not form.validate():
         return render_template("auth/new.html", form=form)
@@ -47,19 +47,26 @@ def auth_create():
 @app.route("/users/<int:user_id>/", methods=["POST"])
 @login_required()
 def auth_update(user_id):
-    form = UserForm(request.form)
+    form = UpdateUserForm(request.form)
     u = User.query.get(user_id)
 
     if not form.validate():
         return render_template("auth/view.html", user=u, form=form)
 
     if u.id == current_user.id or current_user.is_admin():
-        u.username = form.username.data
-        pw_hash = bcrypt.generate_password_hash(
-            form.password.data).decode('utf-8')
-        u.password = pw_hash
-        u.name = form.name.data
-        u.email = form.email.data
+        if form.username.data:
+            u.username = form.username.data
+        if form.new_password.data:
+            if form.new_password.data != form.repeat_password.data:
+                form.repeat_password.errors.append('Passwords do not match')
+                return render_template("auth/view.html", user=u, form=form)
+            pw_hash = bcrypt.generate_password_hash(
+                form.new_password.data).decode('utf-8')
+            u.password = pw_hash
+        if form.name.data:
+            u.name = form.name.data
+        if form.email.data:
+            u.email = form.email.data
 
         try:
             db.session.commit()
@@ -74,7 +81,7 @@ def auth_update(user_id):
 @login_required()
 def auth_view(user_id):
     u = User.query.get(user_id)
-    f = UserForm()
+    f = UpdateUserForm()
     if u.id == current_user.id or current_user.is_admin():
         return render_template("auth/view.html", user=u, form=f)
 

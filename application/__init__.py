@@ -83,6 +83,14 @@ from application.categories.models import Category
 def load_user(user_id):
     return User.query.get(user_id)
 
+# datetime custom filter
+
+
+def format_datetime(value, format='%d-%m-%Y %H:%M:%S'):
+    return value.strftime(format)
+
+
+app.jinja_env.filters['datetime'] = format_datetime
 
 # initiliaze database with default category and admin role
 try:

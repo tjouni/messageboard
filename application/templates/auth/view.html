@@ -2,7 +2,7 @@
 
 {% block body %}
 <h4>Modify user: {{ user.username }}</h4><br>
-
+<p>Leaving a field empty keeps the original value</p>
 <form method="POST" action="{{ url_for('auth_update', user_id=user.id) }}">
     <div class="container">
         <div class="row">
@@ -25,14 +25,29 @@
         </div>
         <div class="row">
             <div class="col-2">
-                {{ form.password.label }}
+                {{ form.new_password.label }}
             </div>
             <div class="col-2">
-                {{ form.password }}
+                {{ form.new_password }}
             </div>
             <div class="col-sm">
                 <ul>
-                    {% for error in form.password.errors %}
+                    {% for error in form.new_password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {{ form.repeat_password.label }}
+            </div>
+            <div class="col-2">
+                {{ form.repeat_password }}
+            </div>
+            <div class="col-sm">
+                <ul>
+                    {% for error in form.repeat_password.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
