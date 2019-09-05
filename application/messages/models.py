@@ -7,7 +7,7 @@ class Message(Base):
                           nullable=False, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey(
         'account.id', ondelete='SET NULL'), nullable=True)
-    message_text = db.Column(db.String(), nullable=False)
+    message_text = db.Column(db.String(1500), nullable=False)
     original_post = db.Column(db.Boolean, nullable=False)
 
     user = db.relationship('User', backref=db.backref(

@@ -11,7 +11,7 @@ class CategoryForm(FlaskForm):
 
 
 class NewCategoryForm(FlaskForm):
-    name = StringField("Category name", [validators.Length(min=1)])
+    name = StringField("Category name", [validators.Length(min=1, max=50)])
 
     class Meta:
         csrf = False

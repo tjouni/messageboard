@@ -15,10 +15,10 @@ class LoginForm(FlaskForm):
 
 
 class NewUserForm(FlaskForm):
-    username = StringField("Username", [validators.Length(min=1)])
-    password = PasswordField("Password", [validators.Length(min=1)])
-    name = StringField("Full name", [validators.Length(min=1)])
-    email = StringField("E-mail", [validators.Length(min=1)])
+    username = StringField("Username", [validators.Length(min=1, max=144)])
+    password = PasswordField("Password", [validators.Length(min=1, max=144)])
+    name = StringField("Full name", [validators.Length(min=1, max=144)])
+    email = StringField("E-mail", [validators.Length(min=1, max=144)])
 
     class Meta:
         csrf = False
@@ -26,11 +26,12 @@ class NewUserForm(FlaskForm):
 
 class UpdateUserForm(FlaskForm):
 
-    username = StringField("Username", [validators.Length(min=1)])
-    new_password = PasswordField("New password")
-    repeat_password = PasswordField("Repeat password")
-    name = StringField("Full name", [validators.Length(min=1)])
-    email = StringField("E-mail", [validators.Length(min=1)])
+    username = StringField("Username", [validators.Length(min=1, max=144)])
+    new_password = PasswordField("New password", [validators.Length(max=144)])
+    repeat_password = PasswordField(
+        "Repeat password", [validators.Length(max=144)])
+    name = StringField("Full name", [validators.Length(min=1, max=144)])
+    email = StringField("E-mail", [validators.Length(min=1, max=144)])
 
     role = QuerySelectMultipleField(
         'Role',
