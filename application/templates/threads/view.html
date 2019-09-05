@@ -5,17 +5,17 @@
 <p>Date created: {{ thread.date_created|datetime }}</p>
 <br>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">Message #</th>
             <th scope="col">Time</th>
-            <th scope="col">Username</th>
+            <th scope="col" colspan="4">Username</th>
         </tr>
     </thead>
     <tbody>
         {% for msg in messages %}
-        <tr>
+        <tr class="tr-light">
             <td scope="col">#{{ msg[0].id }}</td>
             <td scope="col">{{ msg[0].date_created|datetime }}</td>
             <td scope="col">
@@ -43,7 +43,7 @@
             {% endif %}
         </tr>
         <tr>
-            <td colspan="5">{{ msg[0].message_text }}</td>
+            <td colspan="6">{{ msg[0].message_text }}</td>
         </tr>
         {% endfor %}
     </tbody>
