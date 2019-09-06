@@ -26,7 +26,11 @@ def auth_create():
     if not form.validate():
         return render_template("auth/new.html", form=form)
 
-    pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+    if form.new_password.data != form.repeat_password.data:
+        form.repeat_password.errors.append('Passwords do not match')
+        return render_template("auth/new.html", form=form)
+    pw_hash = bcrypt.generate_password_hash(
+        form.new_password.data).decode('utf-8')
 
     u = User(name=form.name.data, username=form.username.data,
              password=pw_hash, email=form.email.data)

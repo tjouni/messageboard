@@ -16,7 +16,9 @@ class LoginForm(FlaskForm):
 
 class NewUserForm(FlaskForm):
     username = StringField("Username", [validators.Length(min=1, max=144)])
-    password = PasswordField("Password", [validators.Length(min=1, max=144)])
+    new_password = PasswordField("Password", [validators.Length(max=144)])
+    repeat_password = PasswordField(
+        "Repeat password", [validators.Length(max=144)])
     name = StringField("Full name", [validators.Length(min=1, max=144)])
     email = StringField(
         "E-mail", [validators.Length(min=1, max=144), validators.Email()])
