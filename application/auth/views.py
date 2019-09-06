@@ -85,6 +85,8 @@ def auth_update(user_id):
 def auth_view(user_id):
     u = User.query.get(user_id)
     form = UpdateUserForm(request.form)
+    form.role.data = u.roles
+    form.category.data = u.categories
     if u.id == current_user.id or current_user.is_admin():
         return render_template("auth/view.html", user=u, form=form)
 

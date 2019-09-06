@@ -39,14 +39,14 @@ class UpdateUserForm(FlaskForm):
         'Role',
         query_factory=lambda: Role.query.all(),
         widget=widgets.ListWidget(prefix_label=False),
-        option_widget=widgets.CheckboxInput(),
+        option_widget=widgets.CheckboxInput()
     )
 
     category = QuerySelectMultipleField(
         'Category',
         query_factory=lambda: Category.query.all(),
         widget=widgets.ListWidget(prefix_label=False),
-        option_widget=widgets.CheckboxInput(),
+        option_widget=widgets.CheckboxInput()
     )
 
     class Meta:
