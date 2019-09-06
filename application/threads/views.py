@@ -68,6 +68,10 @@ def threads_view(thread_id, form=None):
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     (t, messages) = Thread.get_thread(thread_id, page)
+
+    if t.category_id not in current_user.categories:
+        return redirect(url_for("threads_index"))
+
     pagination = Pagination(page=page, total=messages.total,
                             search=search, record_name='messages', css_framework='bootstrap4')
 
@@ -137,6 +141,9 @@ def threads_reply(thread_id):
 
     if not form.validate():
         return threads_view(thread_id, form=form)
+
+    if Thread.query.get(thread_id).category_id not in current_user.categories:
+        return redirect(url_for("threads_index"))
 
     Thread.post_reply(thread_id=thread_id,
                       message_text=form.message_text.data, user_id=current_user.id)
