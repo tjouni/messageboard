@@ -17,7 +17,7 @@
       * Open database with sqlite3 `sqlite3 messageboard.db`
       * Insert many-to-many relation for admin privileges into database
       ```
-      INSERT INTO account (account_id, role_id) VALUES (user id, 1);
+      INSERT INTO user_role (account_id, role_id) VALUES (user id, 1);
       ```
       * Further role/category changes can be done via UI with the admin account
 
@@ -47,6 +47,6 @@
     * Open database with heroku psql `heroku pg:psql`
     * Insert many-to-many relation for admin privileges into database
       ```
-      INSERT INTO account (account_id, role_id) VALUES (user id, 1);
+      INSERT INTO user_role (account_id, role_id) VALUES (user id, 1);
       ```
     * Further role/category changes can be done via UI with the admin account
