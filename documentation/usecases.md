@@ -26,7 +26,7 @@
     * Messages are shown with username and basic message information
     * Modify or delete your own messages
       * Deleting the first message in a thread deletes the whole thread
-    * Edited messages have an 'EDITED'-tag
+    * Edited messages have an 'EDITED'-tag displayed in message title row
     ```
     SELECT Message.id, Message.date_created, Message.date_modified, message_text, user_id, username
     FROM Message
