@@ -9,7 +9,7 @@
     ```
 
 
-### Registered ser
+### Registered user
 
   * Modify or delete your own account
     * Deleting an account doesn't delete messages or threads, instead 'DELETED USER' is shown in the username field
@@ -26,7 +26,7 @@
     * Messages are shown with username and basic message information
     * Modify or delete your own messages
       * Deleting the first message in a thread deletes the whole thread
-    * Edited messages have an 'EDITED'-tag
+    * Edited messages have an 'EDITED'-tag displayed in message title row
     ```
     SELECT Message.id, Message.date_created, Message.date_modified, message_text, user_id, username
     FROM Message
@@ -55,6 +55,11 @@
     ```
     INSERT INTO role (role) VALUES (?);
     INSERT INTO category (name) VALUES (?);
+    ```
+  * Modify all roles and categories except admin role and default category
+    ```
+    UPDATE role SET role=? WHERE role.id = ?
+    UPDATE category SET name=? WHERE category.id = ?
     ```
   * Modify categories and roles for all users
     ```
