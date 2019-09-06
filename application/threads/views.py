@@ -108,7 +108,7 @@ def delete_message(message_id, form=None):
     pagination = Pagination(page=page, total=messages.total,
                             search=search, record_name='messages', css_framework='bootstrap4')
 
-    return render_template("threads/view.html", thread=t, messages=messages.items, form=form, pagination=pagination)
+    return redirect(url_for("threads_view", thread_id=m.thread_id))
 
 
 @app.route("/message/<int:message_id>/", methods=["GET"])
