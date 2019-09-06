@@ -25,7 +25,8 @@ Flaskilla ja sqlalchemyllä toteutettu keskustelufoorumi, jossa on käyttäjiä.
 - [X] Kirjautumisen lisäksi käyttäjä on yhdistetty tietokannassa johonkin tietokohteeseen (ja tätä yhteyttä käytetään), eli käyttäjien tietoja ei tule käyttää pelkästään kirjautumisen osana.
   * Käyttäjä liittyy rooleihin, kategorioihin ja viesteihin. Osa toiminnoista on saavutettavissa vain admin roolilla, ja kategoriat rajoittavat näkyviä/saavutettavia lankoja (eli lankaan ei pääse vaikka olisi oikea osoite tiedossa)
 - [X] Vähintään kahdesta tietokohteesta täysi CRUD (eli luomis-, lukemis-, päivitys-, ja poistotoiminnallisuus).
-Yksi tai useampi monesta moneen -suhde.
   * Täysi CRUD account-, role- ja category-tietokohteissa; message-taulun delete ei poista viestejä, vaan muuttaa lähettäjän nulliksi, muuten täysi
+- [X] Yksi tai useampi monesta moneen -suhde.
+  * 2 kpl, user-category ja user-role
 - [X] Vähintään kaksi monimutkaisempaa useampaa tietokantataulua käyttävää yhteenvetokyselyä. Yhteenvetokyselyt ovat perustellusti (järkevä) osa sovelluksen käyttötapauksia ja toimintaa.
   * 3 kpl. Users, categories ja roles sivujen data tuotetaan yhteenvetokyselyillä, jotka löytyvät myös käyttötapauksista.
