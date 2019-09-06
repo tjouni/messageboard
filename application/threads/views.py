@@ -146,7 +146,7 @@ def threads_reply(thread_id):
 
     thread = Thread.query.get(thread_id)
 
-    if Category.query.get(thread.id) not in current_user.categories:
+    if Category.query.get(thread.category_id) not in current_user.categories:
         return redirect(url_for("threads_index"))
 
     Thread.post_reply(thread_id=thread_id,
