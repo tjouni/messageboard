@@ -63,3 +63,19 @@
     INSERT INTO category_role (account_id, category_id) VALUES (?,?);
     DELETE FROM user_category (account_id, category_id) WHERE account_id = ? AND category_id = ?;
     ```
+  * View roles and number of users in each role
+    ```
+    SELECT Role.id, Role.role, (SELECT COUNT(DISTINCT a.id) FROM Role as r2
+    JOIN user_role AS ur ON Role.id = ur.role_id
+    JOIN account AS a ON ur.account_id = a.id) AS usercount FROM Role
+    GROUP BY Role.id;
+    ```
+  * View categories and number of threads and users in each category
+    ```
+    SELECT Category.id, Category.name, COUNT(Thread.id) as threadcount,
+     (SELECT COUNT(a.id) FROM Category AS c
+      JOIN user_category AS uc ON c.id = uc.category_id AND c.id = Category.id
+      JOIN account AS a ON uc.account_id = a.id) AS usercount FROM Category
+    LEFT JOIN Thread ON Thread.category_id = Category.id
+    GROUP BY Category.id;
+    
