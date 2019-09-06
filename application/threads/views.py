@@ -83,6 +83,11 @@ def threads_view(thread_id, form=None):
 @app.route("/delete/<int:message_id>/", methods=["GET"])
 @login_required()
 def delete_message(message_id, form=None):
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+
     if form is None:
         form = MessageForm(request.form)
 
@@ -97,9 +102,13 @@ def delete_message(message_id, form=None):
         return redirect(url_for("threads_index"))
 
     Thread.delete_message(message_id)
-    (t, res) = Thread.get_thread(m.thread_id)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    (t, messages) = Thread.get_thread(m.thread_id)
 
-    return render_template("threads/view.html", thread=t, messages=res, form=form)
+    pagination = Pagination(page=page, total=messages.total,
+                            search=search, record_name='messages', css_framework='bootstrap4')
+
+    return render_template("threads/view.html", thread=t, messages=messages.items, form=form, pagination=pagination)
 
 
 @app.route("/message/<int:message_id>/", methods=["GET"])
