@@ -25,7 +25,7 @@ class Thread(Base):
         return Thread.query.order_by(Thread.date_modified.desc()).filter(Thread.category_id.in_(current_user.get_category_ids())).paginate(page, Thread.items_per_page, False)
 
     @staticmethod
-    def get_thread(thread_id, page):
+    def get_thread(thread_id, page=1):
         '''Return a tuple with thread and a paginated list of messages'''
         t = Thread.query.get(thread_id)
         messages = db.session.query(Message).outerjoin(User).add_columns(User.username).filter(
