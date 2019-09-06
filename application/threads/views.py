@@ -9,6 +9,8 @@ from application.threads.forms import ThreadForm
 from application.messages.models import Message
 from application.messages.forms import MessageForm
 
+from application.categories.models import Category
+
 
 # datetime custom filter
 def datetimeformat(value, format='%d-%m-%Y %H:%M:%s'):
@@ -69,7 +71,7 @@ def threads_view(thread_id, form=None):
     page = request.args.get(get_page_parameter(), type=int, default=1)
     (t, messages) = Thread.get_thread(thread_id, page)
 
-    if t.category_id not in current_user.categories:
+    if Category.query.get(t.category_id) not in current_user.categories:
         return redirect(url_for("threads_index"))
 
     pagination = Pagination(page=page, total=messages.total,
@@ -142,7 +144,9 @@ def threads_reply(thread_id):
     if not form.validate():
         return threads_view(thread_id, form=form)
 
-    if Thread.query.get(thread_id).category_id not in current_user.categories:
+    thread = Thread.query.get(thread_id)
+
+    if Category.query.get(thread.id) not in current_user.categories:
         return redirect(url_for("threads_index"))
 
     Thread.post_reply(thread_id=thread_id,
